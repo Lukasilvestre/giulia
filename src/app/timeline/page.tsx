@@ -1,22 +1,52 @@
-﻿import TimeBlock from "@/components/timeline/TimeBlock";
-import { geologicalTimescale } from "@/data/geological-timescale";
+import TimelineExplorer from "@/components/timeline/TimelineExplorer";
 
-export default function TimelinePage() {
+import {
+  geologicalTimescale,
+} from "@/data/geological-timescale";
+
+interface TimelinePageProps {
+  searchParams: Promise<{
+    focus?: string;
+  }>;
+}
+
+export default async function TimelinePage({
+  searchParams,
+}: TimelinePageProps) {
+  const params =
+    await searchParams;
+
   return (
-    <section className="page-container">
-      <div className="page-header">
-        <span className="eyebrow">DEEP TIME</span>
-        <h1>Linha do tempo geológica</h1>
-        <p>
-          Explore a história da Terra começando pelos grandes éons.
-        </p>
-      </div>
+    <main className="timeline-page-v1">
+      <header className="timeline-hero-v1">
+        <span className="eyebrow">
+          GEOLOGICAL TIME
+        </span>
 
-      <div className="time-grid">
-        {geologicalTimescale.map((interval) => (
-          <TimeBlock key={interval.id} interval={interval} />
-        ))}
-      </div>
-    </section>
+        <h1>
+          Navegue pela história
+          da Terra.
+        </h1>
+
+        <p>
+          Explore a escala
+          geológica hierarquicamente:
+          selecione um éon, depois
+          uma era e então um período
+          para acessar seus dados,
+          organismos, fósseis e
+          reconstruções.
+        </p>
+      </header>
+
+      <TimelineExplorer
+        intervals={
+          geologicalTimescale
+        }
+        initialFocus={
+          params.focus
+        }
+      />
+    </main>
   );
 }

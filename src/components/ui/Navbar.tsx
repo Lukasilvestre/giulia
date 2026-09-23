@@ -17,16 +17,8 @@ export default function Navbar() {
       </Link>
 
       <nav className="nav-links">
-        <Link href="/">
-          Início
-        </Link>
-
         <Link href="/timeline">
           Tempo
-        </Link>
-
-        <Link href="/paleoearth">
-          Terra
         </Link>
 
         <Link href="/organisms">
@@ -37,12 +29,20 @@ export default function Navbar() {
           Fósseis
         </Link>
 
+        <Link href="/paleoearth">
+          Terra
+        </Link>
+
         <Link href="/search">
           Busca
         </Link>
 
         <Link href="/study">
           Estudo
+        </Link>
+
+        <Link href="/about">
+          Sobre
         </Link>
       </nav>
     </header>
