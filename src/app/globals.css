@@ -2363,3 +2363,299 @@ a {
     align-items: flex-start;
   }
 }
+
+/* =========================================================
+   GIULIA v0.5.1 - PBDB OCCURRENCE MAP
+   ========================================================= */
+
+.pbdb-map-section {
+  margin: 60px 0;
+}
+
+.pbdb-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+
+  margin-bottom: 25px;
+}
+
+.pbdb-map-header h3 {
+  margin: 10px 0;
+
+  font-size:
+    clamp(2rem, 4vw, 3.5rem);
+
+  font-weight: 400;
+
+  letter-spacing: -0.04em;
+}
+
+.pbdb-map-header p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.6;
+}
+
+.pbdb-map-counter {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 130px;
+
+  text-align: right;
+}
+
+.pbdb-map-counter strong {
+  color: var(--accent);
+
+  font-size: 2.2rem;
+
+  font-weight: 400;
+}
+
+.pbdb-map-counter span {
+  color: var(--text-secondary);
+
+  font-size: 0.68rem;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.pbdb-map-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    320px;
+
+  min-height: 540px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.pbdb-map {
+  width: 100%;
+  min-height: 540px;
+
+  background: #0c1513;
+
+  z-index: 1;
+}
+
+.pbdb-map-sidebar {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding: 25px;
+
+  border-left: 1px solid var(--border);
+}
+
+.pbdb-map-instruction {
+  margin: auto 0;
+}
+
+.pbdb-map-instruction span {
+  color: var(--accent);
+
+  font-size: 0.63rem;
+
+  letter-spacing: 0.14em;
+}
+
+.pbdb-map-instruction p {
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+}
+
+.pbdb-selected-occurrence h4 {
+  margin: 10px 0 30px;
+
+  font-size: 1.55rem;
+
+  font-weight: 500;
+}
+
+.pbdb-selected-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.pbdb-selected-data > div {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.pbdb-selected-data span {
+  color: var(--text-secondary);
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.pbdb-selected-data strong {
+  max-width: 170px;
+
+  text-align: right;
+
+  font-size: 0.75rem;
+
+  font-weight: 500;
+
+  overflow-wrap: anywhere;
+}
+
+.pbdb-map-warning {
+  margin-top: auto;
+
+  padding-top: 25px;
+}
+
+.pbdb-map-warning strong {
+  color: var(--accent);
+
+  font-size: 0.7rem;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.pbdb-map-warning p {
+  margin-bottom: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 0.76rem;
+
+  line-height: 1.6;
+}
+
+.pbdb-map-empty {
+  margin: 60px 0;
+
+  padding: 35px;
+
+  border: 1px dashed var(--border);
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.02
+  );
+}
+
+.pbdb-map-empty h3 {
+  margin: 10px 0;
+
+  font-size: 1.5rem;
+
+  font-weight: 500;
+}
+
+.pbdb-map-empty p {
+  margin-bottom: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+}
+
+/* Leaflet integration */
+
+.pbdb-map .leaflet-control-zoom a {
+  background: #101b18;
+
+  color: var(--text);
+
+  border-color: var(--border);
+}
+
+.pbdb-map .leaflet-control-zoom a:hover {
+  background: #17241f;
+
+  color: var(--accent);
+}
+
+.pbdb-map .leaflet-control-attribution {
+  background:
+    rgba(7, 16, 14, 0.85);
+
+  color: var(--text-secondary);
+
+  font-size: 9px;
+}
+
+.pbdb-map .leaflet-control-attribution a {
+  color: var(--accent);
+}
+
+.pbdb-map .leaflet-tooltip {
+  background: #0d1815;
+
+  border: 1px solid var(--border);
+
+  color: var(--text);
+
+  box-shadow: none;
+
+  font-size: 0.72rem;
+}
+
+.pbdb-map .leaflet-tooltip-top::before {
+  border-top-color: #0d1815;
+}
+
+@media (max-width: 950px) {
+  .pbdb-map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pbdb-map-sidebar {
+    min-height: 340px;
+
+    border-left: 0;
+
+    border-top:
+      1px solid var(--border);
+  }
+}
+
+@media (max-width: 600px) {
+  .pbdb-map-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .pbdb-map-counter {
+    text-align: left;
+  }
+
+  .pbdb-map,
+  .pbdb-map-layout {
+    min-height: 430px;
+  }
+}

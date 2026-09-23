@@ -5,6 +5,8 @@ import {
   useState,
 } from "react";
 
+import PbdbMap from "@/components/fossils/PbdbMap";
+
 import type {
   PbdbOccurrence,
   PbdbSearchResult,
@@ -302,6 +304,9 @@ export default function PbdbSearch({
               LIVE
             </div>
           </header>
+
+          
+          <PbdbMap records={result.records} />
 
           {result.records.length ===
           0 ? (
