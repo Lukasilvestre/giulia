@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import SaveToStudyButton from "@/components/study/SaveToStudyButton";
+
 import {
   getPbdbOccurrence,
 } from "@/lib/pbdb";
@@ -154,6 +156,66 @@ export default async function OccurrencePage({
           </strong>
         </div>
       </header>
+
+      
+      <div className="occurrence-study-action">
+        <SaveToStudyButton
+          item={{
+            id:
+              String(
+                record.occurrence_no
+              ),
+
+            type:
+              "occurrence",
+
+            title:
+              name,
+
+            subtitle:
+              `PBDB #${record.occurrence_no}`,
+
+            href:
+              `/fossils/occurrence/${record.occurrence_no}`,
+
+            metadata: {
+              age:
+                getOccurrenceAgeLabel(
+                  record
+                ),
+
+              formation:
+                record.formation,
+
+              environment:
+                record.environment,
+
+              location:
+                [
+                  record.state,
+                  record.cc,
+                ]
+                  .filter(Boolean)
+                  .join(", "),
+
+              coordinates:
+                record.lat !== undefined &&
+                record.lng !== undefined
+                  ? `${record.lat}, ${record.lng}`
+                  : undefined,
+
+              pbdbOccurrence:
+                String(
+                  record.occurrence_no
+                ),
+
+              reconstructionAge:
+                reconstructionAge ??
+                undefined,
+            },
+          }}
+        />
+      </div>
 
       <section className="occurrence-summary-grid">
         <article>

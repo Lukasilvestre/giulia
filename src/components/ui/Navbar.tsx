@@ -41,9 +41,9 @@ export default function Navbar() {
           Busca
         </Link>
 
-        <span className="disabled-link">
+        <Link href="/study">
           Estudo
-        </span>
+        </Link>
       </nav>
     </header>
   );

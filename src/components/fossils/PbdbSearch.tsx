@@ -11,11 +11,13 @@ import {
 } from "react";
 
 import PbdbMap from "@/components/fossils/PbdbMap";
+import SaveToStudyButton from "@/components/study/SaveToStudyButton";
 
 import {
   buildPaleoEarthUrl,
   getOccurrenceAgeLabel,
   getOccurrenceName,
+  getOccurrenceReconstructionAge,
 } from "@/lib/pbdb-utils";
 
 import type {
@@ -836,6 +838,64 @@ export default function PbdbSearch({
                         </div>
 
                         <div className="pbdb-record-actions">
+                          <SaveToStudyButton
+                            compact
+                            item={{
+                              id:
+                                String(
+                                  occurrence.occurrence_no
+                                ),
+
+                              type:
+                                "occurrence",
+
+                              title:
+                                name,
+
+                              subtitle:
+                                `PBDB #${occurrence.occurrence_no}`,
+
+                              href:
+                                `/fossils/occurrence/${occurrence.occurrence_no}`,
+
+                              metadata: {
+                                age:
+                                  getOccurrenceAgeLabel(
+                                    occurrence
+                                  ),
+
+                                formation:
+                                  occurrence.formation,
+
+                                environment:
+                                  occurrence.environment,
+
+                                location:
+                                  [
+                                    occurrence.state,
+                                    occurrence.cc,
+                                  ]
+                                    .filter(Boolean)
+                                    .join(", "),
+
+                                coordinates:
+                                  occurrence.lat !== undefined &&
+                                  occurrence.lng !== undefined
+                                    ? `${occurrence.lat}, ${occurrence.lng}`
+                                    : undefined,
+
+                                pbdbOccurrence:
+                                  String(
+                                    occurrence.occurrence_no
+                                  ),
+
+                                reconstructionAge:
+                                  getOccurrenceReconstructionAge(
+                                    occurrence
+                                  ) ?? undefined,
+                              },
+                            }}
+                          />
                           <Link
                             href={`/fossils/occurrence/${occurrence.occurrence_no}`}
                           >

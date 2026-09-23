@@ -1,4 +1,6 @@
 import Link from "next/link";
+
+import SaveToStudyButton from "@/components/study/SaveToStudyButton";
 import { notFound } from "next/navigation";
 
 import {
@@ -98,6 +100,33 @@ export default async function OrganismPage({
             >
               Explorar {organism.parentInterval.name}
             </Link>
+
+            <SaveToStudyButton
+              item={{
+                id:
+                  organism.slug,
+
+                type:
+                  "organism",
+
+                title:
+                  organism.scientificName,
+
+                subtitle:
+                  organism.group,
+
+                href:
+                  `/organisms/${organism.slug}`,
+
+                metadata: {
+                  group:
+                    organism.group,
+
+                  temporalRange:
+                    `${organism.temporalRange.startMa}–${organism.temporalRange.endMa} Ma`,
+                },
+              }}
+            />
           </div>
         </div>
 
