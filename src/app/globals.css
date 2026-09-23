@@ -1405,3 +1405,495 @@ a {
     text-align: right;
   }
 }
+
+/* =========================================================
+   GIULIA ORGANISM EXPLORER
+   ========================================================= */
+
+.clickable-life-card {
+  cursor: pointer;
+}
+
+.organism-card-link {
+  display: block;
+  margin-top: 18px;
+
+  color: var(--accent);
+
+  font-size: 0.72rem;
+
+  letter-spacing: 0.05em;
+}
+
+.organism-page {
+  max-width: 1450px;
+
+  margin: auto;
+
+  padding: 70px 8vw 130px;
+}
+
+.organism-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+
+  margin-bottom: 70px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.76rem;
+}
+
+.organism-breadcrumbs a:hover {
+  color: var(--accent);
+}
+
+/* HERO */
+
+.organism-hero {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.2fr)
+    minmax(300px, 0.8fr);
+
+  gap: 80px;
+
+  align-items: center;
+}
+
+.organism-hero-text h1 {
+  margin: 18px 0 5px;
+
+  font-size:
+    clamp(3.2rem, 7vw, 7rem);
+
+  line-height: 0.95;
+
+  font-weight: 400;
+
+  letter-spacing: -0.055em;
+}
+
+.organism-group {
+  display: block;
+
+  margin-top: 14px;
+
+  color: var(--accent);
+
+  font-size: 0.85rem;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.organism-hero-text p {
+  max-width: 720px;
+
+  margin-top: 35px;
+
+  color: var(--text-secondary);
+
+  font-size: 1.12rem;
+
+  line-height: 1.8;
+}
+
+.organism-visual {
+  min-height: 430px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid var(--border);
+
+  background:
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(214,198,132,0.13),
+      transparent 55%
+    ),
+    var(--surface);
+}
+
+.organism-visual span {
+  color: rgba(255,255,255,0.15);
+
+  font-size: 2rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.35em;
+}
+
+.organism-visual small {
+  margin-top: 15px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.7rem;
+}
+
+/* FACTS */
+
+.organism-facts {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(170px, 1fr));
+
+  gap: 1px;
+
+  margin-top: 80px;
+
+  background: var(--border);
+
+  border: 1px solid var(--border);
+}
+
+.organism-facts article {
+  min-height: 150px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 22px;
+
+  background: var(--surface);
+}
+
+.organism-facts span {
+  color: var(--text-secondary);
+
+  font-size: 0.65rem;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
+}
+
+.organism-facts strong {
+  margin-top: auto;
+
+  padding-top: 30px;
+
+  font-size: 1.15rem;
+
+  font-weight: 500;
+}
+
+.organism-facts small {
+  margin-top: 5px;
+
+  color: var(--text-secondary);
+}
+
+/* TIME */
+
+.organism-time-section {
+  margin-top: 120px;
+
+  padding-top: 70px;
+
+  border-top: 1px solid var(--border);
+}
+
+.organism-section-heading {
+  max-width: 720px;
+}
+
+.organism-section-heading h2,
+.organism-two-columns h2 {
+  margin: 10px 0 18px;
+
+  font-size:
+    clamp(2rem, 4vw, 3.8rem);
+
+  font-weight: 400;
+
+  letter-spacing: -0.04em;
+}
+
+.organism-section-heading p {
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+}
+
+.organism-time-scale {
+  margin-top: 50px;
+}
+
+.time-scale-labels {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  color: var(--text-secondary);
+
+  font-family: monospace;
+
+  font-size: 0.8rem;
+}
+
+.organism-time-bar {
+  height: 8px;
+
+  background:
+    rgba(255,255,255,0.06);
+}
+
+.organism-time-bar div {
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      #836e39
+    );
+}
+
+/* TWO COLUMN */
+
+.organism-two-columns {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 90px;
+
+  margin-top: 120px;
+
+  padding-top: 70px;
+
+  border-top: 1px solid var(--border);
+}
+
+/* TAXONOMY */
+
+.taxonomy-tree {
+  margin-top: 35px;
+}
+
+.taxonomy-entry {
+  max-width: 460px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 12px 15px;
+
+  margin-bottom: 5px;
+
+  background: var(--surface);
+
+  border-left: 2px solid
+    rgba(214,198,132,0.35);
+}
+
+.taxonomy-entry span {
+  color: var(--text-secondary);
+
+  font-size: 0.65rem;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.taxonomy-entry strong {
+  font-size: 0.88rem;
+
+  font-weight: 500;
+
+  font-style: italic;
+}
+
+/* DISTRIBUTION */
+
+.distribution-panel {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 35px;
+}
+
+.distribution-panel span {
+  padding: 9px 12px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  font-size: 0.78rem;
+}
+
+.environment-title {
+  margin-top: 45px;
+
+  font-size: 0.78rem;
+
+  font-weight: 500;
+
+  color: var(--accent);
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+/* HIGHLIGHTS */
+
+.organism-highlight-list {
+  margin-top: 35px;
+}
+
+.organism-highlight-list > div {
+  display: flex;
+
+  gap: 13px;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid var(--border);
+
+  color: var(--text-secondary);
+
+  line-height: 1.5;
+}
+
+.organism-highlight-list > div > span {
+  width: 5px;
+  height: 5px;
+
+  flex: 0 0 5px;
+
+  margin-top: 8px;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+}
+
+/* SOURCES */
+
+.organism-references {
+  margin-top: 120px;
+
+  padding-top: 70px;
+
+  border-top: 1px solid var(--border);
+}
+
+.organism-references article {
+  display: grid;
+
+  grid-template-columns:
+    60px 1fr;
+
+  gap: 20px;
+
+  padding: 25px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.organism-references article > span {
+  color: #50605a;
+
+  font-family: monospace;
+}
+
+.organism-references small {
+  color: var(--accent);
+
+  font-size: 0.65rem;
+
+  letter-spacing: 0.07em;
+}
+
+.organism-references h3 {
+  margin: 7px 0;
+
+  font-size: 1.05rem;
+
+  font-weight: 500;
+}
+
+.organism-references a {
+  color: var(--text-secondary);
+
+  font-size: 0.75rem;
+}
+
+.organism-references a:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .organism-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .organism-visual {
+    min-height: 300px;
+  }
+
+  .organism-two-columns {
+    grid-template-columns: 1fr;
+
+    gap: 65px;
+  }
+}
+
+@media (max-width: 600px) {
+  .organism-page {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+
+  .taxonomy-entry {
+    margin-left: 0 !important;
+  }
+}
+
+.organism-card-anchor {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.organism-card-anchor .life-card {
+  height: 100%;
+}
+
+.clickable-life-card {
+  cursor: pointer;
+}
+
+.clickable-life-card:hover .organism-card-link {
+  transform: translateX(4px);
+}
+
+.organism-card-link {
+  transition: transform 0.2s;
+}
+

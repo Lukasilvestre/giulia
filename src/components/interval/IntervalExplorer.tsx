@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import type {
@@ -25,38 +26,14 @@ const tabs: {
   id: TabId;
   label: string;
 }[] = [
-  {
-    id: "overview",
-    label: "Visão geral",
-  },
-  {
-    id: "stratigraphy",
-    label: "Escala",
-  },
-  {
-    id: "earth",
-    label: "Terra",
-  },
-  {
-    id: "climate",
-    label: "Clima",
-  },
-  {
-    id: "life",
-    label: "Vida",
-  },
-  {
-    id: "events",
-    label: "Eventos",
-  },
-  {
-    id: "fossils",
-    label: "Fósseis",
-  },
-  {
-    id: "references",
-    label: "Referências",
-  },
+  { id: "overview", label: "Visão geral" },
+  { id: "stratigraphy", label: "Escala" },
+  { id: "earth", label: "Terra" },
+  { id: "climate", label: "Clima" },
+  { id: "life", label: "Vida" },
+  { id: "events", label: "Eventos" },
+  { id: "fossils", label: "Fósseis" },
+  { id: "references", label: "Referências" },
 ];
 
 function LifeCard({
@@ -64,15 +41,19 @@ function LifeCard({
 }: {
   item: LifeEntry;
 }) {
-  return (
-    <article className="life-card">
+  const card = (
+    <article
+      className={
+        item.organismSlug
+          ? "life-card clickable-life-card"
+          : "life-card"
+      }
+    >
       <div className="life-card-heading">
         <h4>{item.name}</h4>
 
         {item.subtitle && (
-          <span>
-            {item.subtitle}
-          </span>
+          <span>{item.subtitle}</span>
         )}
       </div>
 
@@ -90,7 +71,26 @@ function LifeCard({
           ))}
         </div>
       )}
+
+      {item.organismSlug && (
+        <span className="organism-card-link">
+          Explorar organismo →
+        </span>
+      )}
     </article>
+  );
+
+  if (!item.organismSlug) {
+    return card;
+  }
+
+  return (
+    <Link
+      href={`/organisms/${item.organismSlug}`}
+      className="organism-card-anchor"
+    >
+      {card}
+    </Link>
   );
 }
 
@@ -107,13 +107,9 @@ export default function IntervalExplorer({
           SCIENTIFIC DOSSIER
         </span>
 
-        <h2>
-          {content.tagline}
-        </h2>
+        <h2>{content.tagline}</h2>
 
-        <p>
-          {content.summary}
-        </p>
+        <p>{content.summary}</p>
       </div>
 
       <div
@@ -144,7 +140,6 @@ export default function IntervalExplorer({
       </div>
 
       <div className="explorer-content">
-
         {activeTab === "overview" && (
           <div>
             <div className="fact-grid">
@@ -228,16 +223,16 @@ export default function IntervalExplorer({
                         </div>
 
                         <div className="stratigraphy-range">
-                          {division.startMa
-                            .toLocaleString(
-                              "pt-BR"
-                            )}{" "}
+                          {division.startMa.toLocaleString(
+                            "pt-BR"
+                          )}{" "}
                           Ma
+
                           <span>→</span>
-                          {division.endMa
-                            .toLocaleString(
-                              "pt-BR"
-                            )}{" "}
+
+                          {division.endMa.toLocaleString(
+                            "pt-BR"
+                          )}{" "}
                           Ma
                         </div>
                       </div>
@@ -277,9 +272,7 @@ export default function IntervalExplorer({
                                   </strong>
 
                                   <span>
-                                    {
-                                      stage.name
-                                    }
+                                    {stage.name}
                                   </span>
                                 </div>
 
@@ -332,10 +325,10 @@ export default function IntervalExplorer({
                 unidades geocronológicas.
                 Lower e Upper Cretaceous são
                 seus equivalentes
-                cronoestratigráficos.
-                Da mesma forma, uma idade
-                geocronológica corresponde a
-                um andar na
+                cronoestratigráficos. Da
+                mesma forma, uma idade
+                geocronológica corresponde
+                a um andar na
                 cronoestratigrafia.
               </p>
             </div>
@@ -381,16 +374,13 @@ export default function IntervalExplorer({
                     className="highlight-item"
                   >
                     <span className="highlight-dot" />
-
                     {highlight}
                   </div>
                 )
               )}
 
               <div className="future-module">
-                <span>
-                  PaleoEarth
-                </span>
+                <span>PaleoEarth</span>
 
                 <strong>
                   Globo paleogeográfico
@@ -445,7 +435,6 @@ export default function IntervalExplorer({
                     className="highlight-item"
                   >
                     <span className="highlight-dot" />
-
                     {highlight}
                   </div>
                 )
@@ -518,8 +507,7 @@ export default function IntervalExplorer({
                     <span className="event-point" />
 
                     {index <
-                      content.events
-                        .length -
+                      content.events.length -
                         1 && (
                       <span className="event-line" />
                     )}
@@ -602,6 +590,15 @@ export default function IntervalExplorer({
                           fossil.description
                         }
                       </p>
+
+                      {fossil.organismSlug && (
+                        <Link
+                          href={`/organisms/${fossil.organismSlug}`}
+                          className="reference-link"
+                        >
+                          Explorar organismo →
+                        </Link>
+                      )}
                     </div>
                   </article>
                 )
@@ -701,7 +698,6 @@ export default function IntervalExplorer({
             </div>
           </div>
         )}
-
       </div>
     </section>
   );

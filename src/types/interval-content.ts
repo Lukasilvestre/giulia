@@ -17,12 +17,18 @@ export interface LifeEntry {
   subtitle?: string;
   description: string;
   tags?: string[];
+
+  organismSlug?: string;
 }
 
 export interface GeologicalEventEntry {
   age: string;
   title: string;
-  type: "evolution" | "geology" | "climate" | "extinction";
+  type:
+    | "evolution"
+    | "geology"
+    | "climate"
+    | "extinction";
   description: string;
 }
 
@@ -31,11 +37,14 @@ export interface FossilEntry {
   group: string;
   interval: string;
   description: string;
+
+  organismSlug?: string;
 }
 
 export interface StratigraphicStage {
   name: string;
   namePt: string;
+
   startMa: number;
   endMa: number;
 }
