@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GIULIA
 
-## Getting Started
+**Geological Interactive Universe of Life in Ages**
 
-First, run the development server:
+GIULIA is an interactive web platform for exploring geological time, organisms, fossil occurrences, paleontological data, and paleogeographic reconstructions.
+
+## Live Application
+
+https://giulia-ashy.vercel.app
+
+## About
+
+GIULIA organizes geological and paleontological exploration around the geological time scale.
+
+The main navigation hierarchy is:
+
+```text
+Eon
+ ↓
+Era
+ ↓
+Period
+ ↓
+Epoch / Series
+```
+
+From geological time, users can continue exploring organisms, fossil occurrences, interval dossiers, and paleogeographic reconstructions.
+
+## Main Features
+
+- Hierarchical geological timeline
+- Geological interval atlas
+- Organism explorer
+- Paleobiology Database (PBDB) fossil occurrence search
+- Interactive fossil occurrence maps
+- Individual fossil occurrence pages
+- GPlates paleogeographic reconstruction
+- Global search
+- Research Workspace
+- Notes and comparison tools
+- JSON and CSV export
+
+## Scientific Sources
+
+GIULIA currently integrates or references:
+
+- International Commission on Stratigraphy (ICS)
+- Paleobiology Database (PBDB)
+- GPlates Web Service
+
+## Scientific Interpretation
+
+PBDB occurrence records should not be interpreted directly as biological abundance. The fossil record is affected by preservation, collection, sampling, publication, and digitization biases.
+
+PBDB coordinates represent present-day fossil locality coordinates.
+
+Paleogeographic positions shown by PaleoEarth are model-dependent reconstructions and are not directly observed historical coordinates.
+
+## Technology
+
+- Next.js
+- React
+- TypeScript
+- Leaflet
+- Node.js
+- Vercel
+
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Production build:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The source code is hosted on GitHub and production deployments are handled automatically by Vercel.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+Local Development
+      ↓
+GitHub
+      ↓
+main
+      ↓
+Vercel
+      ↓
+GIULIA Production
+```
 
-## Deploy on Vercel
+Production:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+https://giulia-ashy.vercel.app
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Current Version
+
+**GIULIA v1.2**
+
+Current functionality includes:
+
+- expanded geological time scale;
+- navigation through eons, eras, periods, and epochs/series;
+- geological interval dossiers;
+- organism explorer;
+- PBDB integration;
+- GPlates integration;
+- Research Workspace;
+- public deployment.
+
+## Status
+
+GIULIA is currently an experimental academic and scientific exploration platform under active development.
