@@ -12,8 +12,7 @@ export default function Navbar() {
         </span>
 
         <span className="brand-subtitle">
-          Geological Interactive Universe
-          of Life in Ages
+          Geological Interactive Universe of Life in Ages
         </span>
       </Link>
 
@@ -36,6 +35,10 @@ export default function Navbar() {
 
         <Link href="/fossils">
           Fósseis
+        </Link>
+
+        <Link href="/search">
+          Busca
         </Link>
 
         <span className="disabled-link">

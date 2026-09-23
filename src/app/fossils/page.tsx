@@ -4,6 +4,8 @@ interface FossilsPageProps {
   searchParams: Promise<{
     taxon?: string;
     interval?: string;
+    country?: string;
+    region?: string;
   }>;
 }
 
@@ -16,9 +18,6 @@ export default async function FossilsPage({
   const initialTaxon =
     params.taxon ?? "";
 
-  const initialInterval =
-    params.interval ?? "";
-
   return (
     <section className="fossils-page">
       <header className="fossils-hero">
@@ -27,18 +26,15 @@ export default async function FossilsPage({
         </span>
 
         <h1>
-          Explore o registro
-          fóssil.
+          Explore o registro fóssil.
         </h1>
 
         <p>
-          Consulte ocorrências
-          paleontológicas diretamente
-          da Paleobiology Database e
-          transporte registros com
-          coordenadas para uma
-          reconstrução
-          paleogeográfica.
+          Consulte ocorrências paleontológicas,
+          explore sua distribuição geográfica,
+          examine registros individuais e
+          transporte ocorrências para
+          reconstruções paleogeográficas.
         </p>
       </header>
 
@@ -48,17 +44,12 @@ export default async function FossilsPage({
         </span>
 
         <p>
-          Ocorrências da PBDB são
-          registros do banco de dados,
-          não medidas diretas de
-          abundância biológica. Quando
-          um registro possui apenas
-          limites mínimo e máximo de
-          idade, o GIULIA utiliza o
-          ponto médio desse intervalo
-          apenas como idade
-          representativa para a
-          reconstrução tectônica.
+          Uma ocorrência representa um registro
+          cadastrado na Paleobiology Database.
+          Contagens de ocorrências não equivalem
+          diretamente à abundância biológica e
+          estão sujeitas a vieses de preservação,
+          coleta, publicação e amostragem.
         </p>
       </div>
 
@@ -66,9 +57,22 @@ export default async function FossilsPage({
         initialTaxon={
           initialTaxon
         }
+
         initialInterval={
-          initialInterval
+          params.interval ??
+          ""
         }
+
+        initialCountry={
+          params.country ??
+          ""
+        }
+
+        initialRegion={
+          params.region ??
+          ""
+        }
+
         autoSearch={
           Boolean(
             initialTaxon

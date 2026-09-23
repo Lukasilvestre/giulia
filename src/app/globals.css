@@ -3616,3 +3616,842 @@ a {
 
   line-height: 1.7;
 }
+
+/* =========================================================
+   GIULIA v0.8 - SCIENTIFIC DATA PLATFORM
+   ========================================================= */
+
+.pbdb-search-form-v2 {
+  grid-template-columns:
+    minmax(220px, 2fr)
+    minmax(160px, 1fr)
+    100px
+    110px
+    auto;
+}
+
+.pbdb-field select {
+  width: 100%;
+  min-height: 48px;
+
+  padding: 0 12px;
+
+  border: 1px solid var(--border);
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font: inherit;
+}
+
+.pbdb-region-presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 15px;
+}
+
+.pbdb-region-presets > span {
+  margin-right: 8px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.13em;
+}
+
+.pbdb-region-presets button {
+  padding: 8px 12px;
+
+  border: 1px solid var(--border);
+
+  background: transparent;
+
+  color: var(--text-secondary);
+
+  font: inherit;
+
+  font-size: 0.7rem;
+
+  cursor: pointer;
+}
+
+.pbdb-region-presets button.active,
+.pbdb-region-presets button:hover {
+  border-color: var(--accent);
+
+  color: var(--accent);
+}
+
+.pbdb-region-note {
+  max-width: 700px;
+
+  margin-top: 12px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.75rem;
+
+  line-height: 1.6;
+}
+
+.pbdb-query-summary {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin: 20px 0 40px;
+}
+
+.pbdb-query-summary span {
+  padding: 7px 10px;
+
+  border: 1px solid var(--border);
+
+  color: var(--text-secondary);
+
+  font-size: 0.68rem;
+}
+
+.pbdb-query-summary strong {
+  color: var(--text);
+
+  font-weight: 500;
+}
+
+.pbdb-local-filters {
+  margin: 60px 0 25px;
+
+  padding: 25px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.pbdb-local-filters h3 {
+  margin: 8px 0;
+
+  font-size: 1.4rem;
+
+  font-weight: 500;
+}
+
+.pbdb-local-filters p {
+  color: var(--text-secondary);
+
+  font-size: 0.8rem;
+}
+
+.pbdb-local-filters > div {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.pbdb-local-filters input {
+  min-height: 44px;
+
+  padding: 0 12px;
+
+  border: 1px solid var(--border);
+
+  outline: none;
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font: inherit;
+}
+
+.pbdb-record-count {
+  margin-bottom: 18px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.76rem;
+}
+
+.pbdb-record-actions {
+  grid-column: 1 / -1;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 18px;
+
+  margin-top: 10px;
+}
+
+.pbdb-record-actions a {
+  color: var(--accent);
+
+  font-size: 0.72rem;
+}
+
+.pbdb-pagination {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  gap: 20px;
+
+  margin-top: 35px;
+
+  padding: 20px 0;
+
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pbdb-pagination button {
+  padding: 11px 14px;
+
+  border: 1px solid var(--border);
+
+  background: transparent;
+
+  color: var(--text);
+
+  font: inherit;
+
+  font-size: 0.74rem;
+
+  cursor: pointer;
+}
+
+.pbdb-pagination button:last-child {
+  justify-self: end;
+}
+
+.pbdb-pagination button:disabled {
+  opacity: 0.3;
+
+  cursor: not-allowed;
+}
+
+.pbdb-pagination span {
+  color: var(--text-secondary);
+
+  font-size: 0.72rem;
+}
+
+.pbdb-provenance {
+  margin-top: 50px;
+}
+
+/* OCCURRENCE PAGE */
+
+.occurrence-page {
+  max-width: 1450px;
+
+  margin: auto;
+
+  padding: 90px 8vw 150px;
+}
+
+.occurrence-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  margin-bottom: 55px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.7rem;
+}
+
+.occurrence-breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.occurrence-hero {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+  gap: 50px;
+}
+
+.occurrence-hero > div:first-child {
+  max-width: 950px;
+}
+
+.occurrence-hero h1 {
+  margin: 15px 0 22px;
+
+  font-size:
+    clamp(3.5rem, 7vw, 7rem);
+
+  line-height: 0.95;
+
+  font-weight: 400;
+
+  letter-spacing: -0.055em;
+}
+
+.occurrence-hero p {
+  max-width: 680px;
+
+  color: var(--text-secondary);
+
+  line-height: 1.75;
+}
+
+.occurrence-id {
+  display: flex;
+
+  flex-direction: column;
+
+  text-align: right;
+}
+
+.occurrence-id span {
+  color: var(--text-secondary);
+
+  font-size: 0.6rem;
+
+  letter-spacing: 0.15em;
+}
+
+.occurrence-id strong {
+  margin-top: 6px;
+
+  color: var(--accent);
+
+  font-family: monospace;
+
+  font-size: 1.1rem;
+
+  font-weight: 400;
+}
+
+.occurrence-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  margin-top: 70px;
+
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.occurrence-summary-grid article {
+  min-height: 130px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 20px;
+
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.occurrence-summary-grid span {
+  color: var(--text-secondary);
+
+  font-size: 0.6rem;
+
+  letter-spacing: 0.13em;
+}
+
+.occurrence-summary-grid strong {
+  color: var(--accent);
+
+  font-size: 0.9rem;
+
+  font-weight: 500;
+}
+
+.occurrence-content-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 18px;
+
+  margin-top: 60px;
+}
+
+.occurrence-panel {
+  padding: 28px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.occurrence-panel h2 {
+  margin: 8px 0 25px;
+
+  font-size: 1.6rem;
+
+  font-weight: 500;
+}
+
+.occurrence-panel dl,
+.occurrence-reference dl {
+  margin: 0;
+}
+
+.occurrence-panel dl > div,
+.occurrence-reference dl > div {
+  display: grid;
+
+  grid-template-columns:
+    150px 1fr;
+
+  gap: 20px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.occurrence-panel dt,
+.occurrence-reference dt {
+  color: var(--text-secondary);
+
+  font-size: 0.68rem;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.07em;
+}
+
+.occurrence-panel dd,
+.occurrence-reference dd {
+  margin: 0;
+
+  overflow-wrap: anywhere;
+
+  font-size: 0.82rem;
+}
+
+.occurrence-paleoearth {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 40px;
+
+  margin-top: 70px;
+
+  padding: 40px;
+
+  border: 1px solid
+    rgba(143, 209, 158, 0.3);
+
+  background:
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(143, 209, 158, 0.1),
+      transparent 45%
+    ),
+    var(--surface);
+}
+
+.occurrence-paleoearth > div {
+  max-width: 720px;
+}
+
+.occurrence-paleoearth h2 {
+  margin: 9px 0;
+
+  font-size: 2rem;
+
+  font-weight: 500;
+}
+
+.occurrence-paleoearth p {
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+}
+
+.occurrence-paleo-button {
+  white-space: nowrap;
+
+  padding: 14px 18px;
+
+  background: #8fd19e;
+
+  color: #07110c;
+
+  font-size: 0.78rem;
+}
+
+.occurrence-reference {
+  max-width: 900px;
+
+  margin-top: 70px;
+}
+
+.occurrence-reference h2 {
+  margin: 8px 0 25px;
+
+  font-size: 2rem;
+
+  font-weight: 500;
+}
+
+.occurrence-provenance {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-top: 70px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid var(--border);
+}
+
+.occurrence-provenance > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.occurrence-provenance span {
+  color: var(--accent);
+
+  font-size: 0.6rem;
+
+  letter-spacing: 0.13em;
+}
+
+.occurrence-provenance small {
+  color: var(--text-secondary);
+}
+
+.occurrence-provenance a {
+  color: var(--accent);
+
+  font-size: 0.74rem;
+}
+
+.occurrence-error {
+  max-width: 800px;
+
+  padding: 60px 0;
+}
+
+.occurrence-error h1 {
+  font-size: 4rem;
+
+  font-weight: 400;
+}
+
+/* GLOBAL SEARCH */
+
+.global-search-page {
+  max-width: 1350px;
+
+  margin: auto;
+
+  padding: 100px 8vw 150px;
+}
+
+.global-search-hero {
+  max-width: 950px;
+}
+
+.global-search-hero h1 {
+  margin: 15px 0 25px;
+
+  font-size:
+    clamp(3.5rem, 7vw, 7rem);
+
+  line-height: 0.95;
+
+  font-weight: 400;
+
+  letter-spacing: -0.055em;
+}
+
+.global-search-hero p {
+  max-width: 700px;
+
+  color: var(--text-secondary);
+
+  line-height: 1.8;
+}
+
+.global-search-form {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto;
+
+  gap: 10px;
+
+  margin-top: 65px;
+}
+
+.global-search-form input {
+  min-height: 58px;
+
+  padding: 0 18px;
+
+  border: 1px solid var(--border);
+
+  outline: none;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  font: inherit;
+
+  font-size: 1rem;
+}
+
+.global-search-form button {
+  padding: 0 25px;
+
+  border: 0;
+
+  background: var(--accent);
+
+  color: #111713;
+
+  font: inherit;
+
+  cursor: pointer;
+}
+
+.global-search-summary {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 45px;
+
+  padding: 15px 0;
+
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.global-search-summary span {
+  color: var(--text-secondary);
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.13em;
+}
+
+.global-search-summary strong {
+  color: var(--accent);
+
+  font-size: 0.75rem;
+
+  font-weight: 400;
+}
+
+.global-search-results {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        280px,
+        1fr
+      )
+    );
+
+  gap: 14px;
+
+  margin-top: 25px;
+}
+
+.global-search-result {
+  min-height: 220px;
+
+  padding: 25px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+
+  transition: 0.2s;
+}
+
+.global-search-result:hover {
+  transform: translateY(-3px);
+
+  border-color:
+    rgba(214, 198, 132, 0.45);
+}
+
+.global-search-result > span {
+  color: var(--accent);
+
+  font-size: 0.58rem;
+
+  letter-spacing: 0.13em;
+}
+
+.global-search-result h2 {
+  margin: 20px 0 8px;
+
+  font-size: 1.6rem;
+
+  font-weight: 500;
+}
+
+.global-search-result p {
+  color: var(--text-secondary);
+
+  font-size: 0.78rem;
+}
+
+.global-search-result small {
+  display: block;
+
+  margin-top: 35px;
+
+  color: var(--accent);
+}
+
+.global-search-pbdb {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 40px;
+
+  margin-top: 70px;
+
+  padding: 35px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.global-search-pbdb > div {
+  max-width: 700px;
+}
+
+.global-search-pbdb h2 {
+  margin: 8px 0;
+
+  font-size: 2rem;
+
+  font-weight: 500;
+}
+
+.global-search-pbdb p {
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+}
+
+.global-search-pbdb > a {
+  white-space: nowrap;
+
+  color: var(--accent);
+}
+
+@media (max-width: 1000px) {
+  .pbdb-search-form-v2 {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .pbdb-search-button {
+    grid-column: 1 / -1;
+  }
+
+  .occurrence-summary-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .pbdb-search-form-v2,
+  .pbdb-local-filters > div,
+  .occurrence-content-grid,
+  .occurrence-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pbdb-pagination {
+    grid-template-columns: 1fr;
+
+    text-align: center;
+  }
+
+  .pbdb-pagination button:last-child {
+    justify-self: stretch;
+  }
+
+  .pbdb-pagination button {
+    width: 100%;
+  }
+
+  .occurrence-hero,
+  .occurrence-paleoearth,
+  .occurrence-provenance,
+  .global-search-pbdb {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .occurrence-id {
+    text-align: left;
+  }
+
+  .occurrence-panel dl > div,
+  .occurrence-reference dl > div {
+    grid-template-columns: 1fr;
+  }
+
+  .global-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .global-search-form button {
+    min-height: 50px;
+  }
+}

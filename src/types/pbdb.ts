@@ -9,6 +9,12 @@ export interface PbdbOccurrence {
   accepted_name?: string;
   accepted_rank?: string;
 
+  phylum?: string;
+  class?: string;
+  order?: string;
+  family?: string;
+  genus?: string;
+
   early_interval?: string;
   late_interval?: string;
 
@@ -28,21 +34,56 @@ export interface PbdbOccurrence {
   environment?: string;
 
   reference_no?: string | number;
-
   ref_author?: string;
   ref_pubyr?: string | number;
+
+  ref_title?: string;
+  pub_title?: string;
+
+  doi?: string;
+}
+
+export interface PbdbSearchQuery {
+  taxon: string;
+
+  interval?: string;
+
+  country?: string;
+
+  region?: string;
+
+  limit: number;
+
+  page: number;
 }
 
 export interface PbdbSearchResult {
-  query: {
-    taxon: string;
-    interval?: string;
-    limit: number;
-  };
+  query: PbdbSearchQuery;
 
   count: number;
 
+  returned: number;
+
+  page: number;
+
+  totalPages: number | null;
+
+  hasPrevious: boolean;
+
+  hasNext: boolean;
+
   records: PbdbOccurrence[];
+
+  source: {
+    database: string;
+    api: string;
+    requestUrl: string;
+    retrievedAt: string;
+  };
+}
+
+export interface PbdbOccurrenceResult {
+  record: PbdbOccurrence;
 
   source: {
     database: string;

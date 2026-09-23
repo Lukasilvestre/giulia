@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   type FormEvent,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -11,6 +14,8 @@ import PbdbMap from "@/components/fossils/PbdbMap";
 
 import {
   buildPaleoEarthUrl,
+  getOccurrenceAgeLabel,
+  getOccurrenceName,
 } from "@/lib/pbdb-utils";
 
 import type {
@@ -21,84 +26,80 @@ import type {
 interface PbdbSearchProps {
   initialTaxon?: string;
   initialInterval?: string;
+  initialCountry?: string;
+  initialRegion?: string;
   autoSearch?: boolean;
 }
 
-function valueOrDash(
+interface SearchInput {
+  taxon: string;
+  interval: string;
+  country: string;
+  region: string;
+  page: number;
+}
+
+function includesText(
   value:
     | string
     | number
-    | undefined
+    | undefined,
+  query: string
 ) {
-  if (
-    value === undefined ||
-    value === null ||
-    value === ""
-  ) {
-    return "—";
+  if (!query) {
+    return true;
   }
 
-  return String(value);
-}
-
-function formatAge(
-  occurrence: PbdbOccurrence
-) {
-  const max =
-    occurrence.max_ma;
-
-  const min =
-    occurrence.min_ma;
-
-  if (
-    max !== undefined &&
-    min !== undefined
-  ) {
-    return `${max} – ${min} Ma`;
-  }
-
-  if (max !== undefined) {
-    return `${max} Ma`;
-  }
-
-  if (min !== undefined) {
-    return `${min} Ma`;
-  }
-
-  const early =
-    occurrence.early_interval;
-
-  const late =
-    occurrence.late_interval;
-
-  if (
-    early &&
-    late &&
-    early !== late
-  ) {
-    return `${early} – ${late}`;
-  }
-
-  return (
-    early ??
-    late ??
-    "Idade não informada"
-  );
+  return String(
+    value ?? ""
+  )
+    .toLowerCase()
+    .includes(
+      query.toLowerCase()
+    );
 }
 
 export default function PbdbSearch({
   initialTaxon = "",
   initialInterval = "",
+  initialCountry = "",
+  initialRegion = "",
   autoSearch = false,
 }: PbdbSearchProps) {
   const [taxon, setTaxon] =
-    useState(initialTaxon);
+    useState(
+      initialTaxon
+    );
 
   const [
     interval,
     setInterval,
   ] =
-    useState(initialInterval);
+    useState(
+      initialInterval
+    );
+
+  const [
+    country,
+    setCountry,
+  ] =
+    useState(
+      initialCountry
+    );
+
+  const [
+    region,
+    setRegion,
+  ] =
+    useState(
+      initialRegion
+    );
+
+  const [
+    limit,
+    setLimit,
+  ] =
+    useState(50);
 
   const [
     result,
@@ -122,22 +123,46 @@ export default function PbdbSearch({
       null
     );
 
+  const [
+    stateFilter,
+    setStateFilter,
+  ] =
+    useState("");
+
+  const [
+    formationFilter,
+    setFormationFilter,
+  ] =
+    useState("");
+
+  const [
+    environmentFilter,
+    setEnvironmentFilter,
+  ] =
+    useState("");
+
   const automaticSearchExecuted =
     useRef(false);
 
-  async function runSearch(
-    searchTaxon: string,
-    searchInterval: string
-  ) {
+  async function runSearch({
+    taxon:
+      searchTaxon,
+    interval:
+      searchInterval,
+    country:
+      searchCountry,
+    region:
+      searchRegion,
+    page,
+  }: SearchInput) {
     const cleanTaxon =
       searchTaxon.trim();
 
-    const cleanInterval =
-      searchInterval.trim();
-
-    if (!cleanTaxon) {
+    if (
+      cleanTaxon.length < 2
+    ) {
       setError(
-        "Digite um táxon para pesquisar."
+        "Digite um táxon com pelo menos dois caracteres."
       );
 
       return;
@@ -148,20 +173,49 @@ export default function PbdbSearch({
 
     try {
       const params =
-        new URLSearchParams({
-          taxon:
-            cleanTaxon,
+        new URLSearchParams();
 
-          limit:
-            "50",
-        });
+      params.set(
+        "taxon",
+        cleanTaxon
+      );
+
+      params.set(
+        "limit",
+        String(limit)
+      );
+
+      params.set(
+        "page",
+        String(page)
+      );
 
       if (
-        cleanInterval
+        searchInterval.trim()
       ) {
         params.set(
           "interval",
-          cleanInterval
+          searchInterval.trim()
+        );
+      }
+
+      if (
+        searchCountry.trim()
+      ) {
+        params.set(
+          "country",
+          searchCountry
+            .trim()
+            .toUpperCase()
+        );
+      }
+
+      if (
+        searchRegion.trim()
+      ) {
+        params.set(
+          "region",
+          searchRegion.trim()
         );
       }
 
@@ -192,7 +246,7 @@ export default function PbdbSearch({
 
         throw new Error(
           errorData.error ??
-            `Erro HTTP ${response.status} ao consultar a PBDB.`
+            `Erro HTTP ${response.status}.`
         );
       }
 
@@ -224,32 +278,100 @@ export default function PbdbSearch({
     automaticSearchExecuted.current =
       true;
 
-    void runSearch(
-      initialTaxon,
-      initialInterval
-    );
+    void runSearch({
+      taxon:
+        initialTaxon,
+
+      interval:
+        initialInterval,
+
+      country:
+        initialCountry,
+
+      region:
+        initialRegion,
+
+      page: 1,
+    });
   }, [
     autoSearch,
     initialTaxon,
     initialInterval,
+    initialCountry,
+    initialRegion,
   ]);
 
   async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
+    event:
+      FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
 
-    await runSearch(
+    await runSearch({
       taxon,
-      interval
-    );
+      interval,
+      country,
+      region,
+      page: 1,
+    });
   }
+
+  function selectBrazil() {
+    setCountry("BR");
+    setRegion("");
+  }
+
+  function selectRS() {
+    setCountry("BR");
+    setRegion("rs");
+  }
+
+  function clearRegion() {
+    setCountry("");
+    setRegion("");
+  }
+
+  const filteredRecords =
+    useMemo(() => {
+      if (!result) {
+        return [];
+      }
+
+      return result.records.filter(
+        (
+          occurrence:
+            PbdbOccurrence
+        ) => {
+          return (
+            includesText(
+              occurrence.state,
+              stateFilter
+            ) &&
+            includesText(
+              occurrence.formation,
+              formationFilter
+            ) &&
+            includesText(
+              occurrence.environment,
+              environmentFilter
+            )
+          );
+        }
+      );
+    }, [
+      result,
+      stateFilter,
+      formationFilter,
+      environmentFilter,
+    ]);
 
   return (
     <div className="pbdb-explorer">
       <form
-        className="pbdb-search-form"
-        onSubmit={handleSubmit}
+        className="pbdb-search-form pbdb-search-form-v2"
+        onSubmit={
+          handleSubmit
+        }
       >
         <div className="pbdb-field pbdb-main-field">
           <label htmlFor="pbdb-taxon">
@@ -260,13 +382,14 @@ export default function PbdbSearch({
             id="pbdb-taxon"
             type="text"
             value={taxon}
-            onChange={(event) =>
+            onChange={(
+              event
+            ) =>
               setTaxon(
                 event.target.value
               )
             }
-            placeholder="Ex.: Tyrannosaurus"
-            autoComplete="off"
+            placeholder="Ex.: Dinosauria"
           />
         </div>
 
@@ -278,50 +401,147 @@ export default function PbdbSearch({
           <input
             id="pbdb-interval"
             type="text"
-            value={interval}
-            onChange={(event) =>
+            value={
+              interval
+            }
+            onChange={(
+              event
+            ) =>
               setInterval(
                 event.target.value
               )
             }
             placeholder="Ex.: Cretaceous"
-            autoComplete="off"
           />
+        </div>
+
+        <div className="pbdb-field">
+          <label htmlFor="pbdb-country">
+            País
+          </label>
+
+          <input
+            id="pbdb-country"
+            type="text"
+            maxLength={2}
+            value={
+              country
+            }
+            onChange={(
+              event
+            ) =>
+              setCountry(
+                event.target.value.toUpperCase()
+              )
+            }
+            placeholder="BR"
+          />
+        </div>
+
+        <div className="pbdb-field">
+          <label htmlFor="pbdb-limit">
+            Por página
+          </label>
+
+          <select
+            id="pbdb-limit"
+            value={limit}
+            onChange={(
+              event
+            ) =>
+              setLimit(
+                Number(
+                  event.target.value
+                )
+              )
+            }
+          >
+            <option value={25}>
+              25
+            </option>
+
+            <option value={50}>
+              50
+            </option>
+
+            <option value={100}>
+              100
+            </option>
+          </select>
         </div>
 
         <button
           type="submit"
           className="pbdb-search-button"
-          disabled={loading}
+          disabled={
+            loading
+          }
         >
           {loading
             ? "Consultando..."
-            : "Buscar ocorrências"}
+            : "Buscar"}
         </button>
       </form>
 
-      <div className="pbdb-examples">
+      <div className="pbdb-region-presets">
         <span>
-          Experimente:
+          RECORTES
         </span>
 
-        {[
-          "Tyrannosaurus",
-          "Triceratops",
-          "Ammonoidea",
-          "Mosasauridae",
-        ].map((name) => (
-          <button
-            key={name}
-            type="button"
-            onClick={() =>
-              setTaxon(name)
-            }
-          >
-            {name}
-          </button>
-        ))}
+        <button
+          type="button"
+          onClick={
+            clearRegion
+          }
+          className={
+            !country &&
+            !region
+              ? "active"
+              : ""
+          }
+        >
+          Global
+        </button>
+
+        <button
+          type="button"
+          onClick={
+            selectBrazil
+          }
+          className={
+            country ===
+              "BR" &&
+            !region
+              ? "active"
+              : ""
+          }
+        >
+          Brasil
+        </button>
+
+        <button
+          type="button"
+          onClick={
+            selectRS
+          }
+          className={
+            region ===
+            "rs"
+              ? "active"
+              : ""
+          }
+        >
+          Rio Grande do Sul
+        </button>
       </div>
+
+      {region === "rs" && (
+        <p className="pbdb-region-note">
+          O recorte do Rio Grande do Sul utiliza
+          uma caixa geográfica aproximada sobre
+          as coordenadas atuais das ocorrências.
+        </p>
+      )}
 
       {loading && (
         <div className="pbdb-loading">
@@ -330,14 +550,8 @@ export default function PbdbSearch({
           </span>
 
           <h3>
-            Consultando registros fósseis...
+            Consultando registros...
           </h3>
-
-          <p>
-            Buscando ocorrências,
-            localidades e dados
-            estratigráficos.
-          </p>
         </div>
       )}
 
@@ -351,228 +565,394 @@ export default function PbdbSearch({
         </div>
       )}
 
-      {result && !loading && (
-        <div className="pbdb-results">
-          <header className="pbdb-results-header">
-            <div>
-              <span className="eyebrow">
-                LIVE PBDB DATA
+      {result &&
+        !loading && (
+          <div className="pbdb-results">
+            <header className="pbdb-results-header">
+              <div>
+                <span className="eyebrow">
+                  LIVE PBDB DATA
+                </span>
+
+                <h2>
+                  {
+                    result.query.taxon
+                  }
+                </h2>
+
+                <p>
+                  {result.count.toLocaleString(
+                    "pt-BR"
+                  )}{" "}
+                  registro(s) encontrados.
+                  Esta página contém{" "}
+                  {
+                    result.returned
+                  }
+                  .
+                </p>
+              </div>
+
+              <div className="pbdb-live-status">
+                <span />
+                LIVE
+              </div>
+            </header>
+
+            <div className="pbdb-query-summary">
+              {result.query.interval && (
+                <span>
+                  Intervalo:{" "}
+                  <strong>
+                    {
+                      result.query.interval
+                    }
+                  </strong>
+                </span>
+              )}
+
+              {result.query.country && (
+                <span>
+                  País:{" "}
+                  <strong>
+                    {
+                      result.query.country
+                    }
+                  </strong>
+                </span>
+              )}
+
+              {result.query.region ===
+                "rs" && (
+                <span>
+                  Região:{" "}
+                  <strong>
+                    Rio Grande do Sul
+                  </strong>
+                </span>
+              )}
+
+              <span>
+                Página:{" "}
+                <strong>
+                  {result.page}
+                  {result.totalPages
+                    ? ` / ${result.totalPages}`
+                    : ""}
+                </strong>
               </span>
-
-              <h2>
-                {result.query.taxon}
-              </h2>
-
-              <p>
-                {result.count.toLocaleString(
-                  "pt-BR"
-                )}{" "}
-                ocorrência(s) retornada(s)
-                nesta consulta.
-              </p>
             </div>
 
-            <div className="pbdb-live-status">
-              <span />
-              LIVE
-            </div>
-          </header>
-
-          {result.records.length ===
-          0 ? (
-            <div className="pbdb-empty">
-              Nenhuma ocorrência foi
-              retornada para estes
-              filtros.
-            </div>
-          ) : (
-            <>
+            {result.records.length >
+              0 && (
               <PbdbMap
                 records={
                   result.records
                 }
               />
+            )}
 
-              <div className="pbdb-record-list">
-                {result.records.map(
-                  (
-                    occurrence,
-                    index
-                  ) => {
-                    const name =
-                      occurrence.accepted_name ??
-                      occurrence.identified_name ??
-                      "Táxon não informado";
+            <section className="pbdb-local-filters">
+              <header>
+                <span className="eyebrow">
+                  FILTER CURRENT PAGE
+                </span>
 
-                    const paleoUrl =
-                      buildPaleoEarthUrl(
-                        occurrence
-                      );
+                <h3>
+                  Refine os registros carregados
+                </h3>
 
-                    return (
-                      <article
-                        key={`${occurrence.occurrence_no}-${index}`}
-                        className="pbdb-record"
-                      >
-                        <div className="pbdb-record-number">
-                          {String(
-                            index + 1
-                          ).padStart(
-                            2,
-                            "0"
-                          )}
-                        </div>
+                <p>
+                  Estes filtros atuam somente nos
+                  registros presentes na página
+                  atual.
+                </p>
+              </header>
 
-                        <div className="pbdb-record-main">
-                          <span className="pbdb-record-rank">
-                            {valueOrDash(
-                              occurrence.accepted_rank
-                            )}
+              <div>
+                <input
+                  type="text"
+                  value={
+                    stateFilter
+                  }
+                  onChange={(
+                    event
+                  ) =>
+                    setStateFilter(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Estado / região"
+                />
+
+                <input
+                  type="text"
+                  value={
+                    formationFilter
+                  }
+                  onChange={(
+                    event
+                  ) =>
+                    setFormationFilter(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Formação"
+                />
+
+                <input
+                  type="text"
+                  value={
+                    environmentFilter
+                  }
+                  onChange={(
+                    event
+                  ) =>
+                    setEnvironmentFilter(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Ambiente"
+                />
+              </div>
+            </section>
+
+            <div className="pbdb-record-count">
+              Exibindo{" "}
+              <strong>
+                {
+                  filteredRecords.length
+                }
+              </strong>{" "}
+              registro(s) nesta página.
+            </div>
+
+            <div className="pbdb-record-list">
+              {filteredRecords.map(
+                (
+                  occurrence,
+                  index
+                ) => {
+                  const name =
+                    getOccurrenceName(
+                      occurrence
+                    );
+
+                  const paleoUrl =
+                    buildPaleoEarthUrl(
+                      occurrence
+                    );
+
+                  return (
+                    <article
+                      key={`${occurrence.occurrence_no}-${index}`}
+                      className="pbdb-record"
+                    >
+                      <div className="pbdb-record-number">
+                        {String(
+                          index +
+                            1
+                        ).padStart(
+                          2,
+                          "0"
+                        )}
+                      </div>
+
+                      <div className="pbdb-record-main">
+                        <span className="pbdb-record-rank">
+                          {occurrence.accepted_rank ??
+                            "occurrence"}
+                        </span>
+
+                        <h3>
+                          <i>
+                            {
+                              name
+                            }
+                          </i>
+                        </h3>
+
+                        <div className="pbdb-record-tags">
+                          <span>
+                            {
+                              getOccurrenceAgeLabel(
+                                occurrence
+                              )
+                            }
                           </span>
 
-                          <h3>
-                            <i>
-                              {name}
-                            </i>
-                          </h3>
-
-                          {occurrence.identified_name &&
-                            occurrence.identified_name !==
-                              name && (
-                              <small>
-                                Identificado como:{" "}
-                                {
-                                  occurrence.identified_name
-                                }
-                              </small>
-                            )}
-
-                          <div className="pbdb-record-tags">
+                          {occurrence.cc && (
                             <span>
-                              {formatAge(
-                                occurrence
-                              )}
+                              {
+                                occurrence.cc
+                              }
                             </span>
+                          )}
 
-                            {occurrence.cc && (
-                              <span>
-                                {
-                                  occurrence.cc
-                                }
-                              </span>
-                            )}
+                          {occurrence.state && (
+                            <span>
+                              {
+                                occurrence.state
+                              }
+                            </span>
+                          )}
+                        </div>
+                      </div>
 
-                            {occurrence.state && (
-                              <span>
-                                {
-                                  occurrence.state
-                                }
-                              </span>
-                            )}
-                          </div>
+                      <div className="pbdb-record-details">
+                        <div>
+                          <span>
+                            Formação
+                          </span>
+
+                          <strong>
+                            {occurrence.formation ??
+                              "—"}
+                          </strong>
                         </div>
 
-                        <div className="pbdb-record-details">
-                          <div>
-                            <span>
-                              Formação
-                            </span>
+                        <div>
+                          <span>
+                            Ambiente
+                          </span>
 
-                            <strong>
-                              {valueOrDash(
-                                occurrence.formation
-                              )}
-                            </strong>
-                          </div>
+                          <strong>
+                            {occurrence.environment ??
+                              "—"}
+                          </strong>
+                        </div>
 
-                          <div>
-                            <span>
-                              Ambiente
-                            </span>
+                        <div>
+                          <span>
+                            PBDB
+                          </span>
 
-                            <strong>
-                              {valueOrDash(
-                                occurrence.environment
-                              )}
-                            </strong>
-                          </div>
+                          <strong>
+                            #
+                            {
+                              occurrence.occurrence_no
+                            }
+                          </strong>
+                        </div>
 
-                          <div>
-                            <span>
-                              Coordenadas
-                            </span>
-
-                            <strong>
-                              {occurrence.lat !==
-                                undefined &&
-                              occurrence.lng !==
-                                undefined
-                                ? `${occurrence.lat}, ${occurrence.lng}`
-                                : "—"}
-                            </strong>
-                          </div>
-
-                          <div>
-                            <span>
-                              PBDB occurrence
-                            </span>
-
-                            <strong>
-                              #
-                              {
-                                occurrence.occurrence_no
-                              }
-                            </strong>
-                          </div>
+                        <div className="pbdb-record-actions">
+                          <Link
+                            href={`/fossils/occurrence/${occurrence.occurrence_no}`}
+                          >
+                            Abrir registro →
+                          </Link>
 
                           {paleoUrl && (
-                            <a
+                            <Link
                               href={
                                 paleoUrl
                               }
-                              className="pbdb-paleo-link"
                             >
-                              Reconstruir no
                               PaleoEarth →
-                            </a>
+                            </Link>
                           )}
                         </div>
-                      </article>
-                    );
-                  }
-                )}
-              </div>
-            </>
-          )}
-
-          <footer className="pbdb-source-footer">
-            <div>
-              <span>
-                FONTE DOS DADOS
-              </span>
-
-              <strong>
-                Paleobiology Database
-              </strong>
-
-              <small>
-                PBDB Data Service 1.2
-              </small>
+                      </div>
+                    </article>
+                  );
+                }
+              )}
             </div>
 
-            <a
-              href={
-                result.source
-                  .requestUrl
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ver consulta original ↗
-            </a>
-          </footer>
-        </div>
-      )}
+            <nav className="pbdb-pagination">
+              <button
+                type="button"
+                disabled={
+                  !result.hasPrevious ||
+                  loading
+                }
+                onClick={() =>
+                  void runSearch({
+                    taxon,
+                    interval,
+                    country,
+                    region,
+                    page:
+                      Math.max(
+                        result.page -
+                          1,
+                        1
+                      ),
+                  })
+                }
+              >
+                ← Página anterior
+              </button>
+
+              <span>
+                Página{" "}
+                <strong>
+                  {
+                    result.page
+                  }
+                </strong>
+                {result.totalPages &&
+                  ` de ${result.totalPages}`}
+              </span>
+
+              <button
+                type="button"
+                disabled={
+                  !result.hasNext ||
+                  loading
+                }
+                onClick={() =>
+                  void runSearch({
+                    taxon,
+                    interval,
+                    country,
+                    region,
+                    page:
+                      result.page +
+                      1,
+                  })
+                }
+              >
+                Próxima página →
+              </button>
+            </nav>
+
+            <footer className="pbdb-source-footer pbdb-provenance">
+              <div>
+                <span>
+                  PROVENIÊNCIA
+                </span>
+
+                <strong>
+                  Paleobiology Database
+                </strong>
+
+                <small>
+                  PBDB Data Service 1.2
+                </small>
+
+                <small>
+                  Recuperado em{" "}
+                  {new Date(
+                    result.source.retrievedAt
+                  ).toLocaleString(
+                    "pt-BR"
+                  )}
+                </small>
+              </div>
+
+              <a
+                href={
+                  result.source.requestUrl
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abrir consulta PBDB ↗
+              </a>
+            </footer>
+          </div>
+        )}
     </div>
   );
 }
