@@ -1,12 +1,15 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import TimeBlock from "@/components/timeline/TimeBlock";
+import IntervalExplorer from "@/components/interval/IntervalExplorer";
 
 import {
   findIntervalBySlug,
   findIntervalPath,
 } from "@/lib/geologicalTime";
+
+import { getIntervalContent } from "@/data/intervals";
 
 interface IntervalPageProps {
   params: Promise<{
@@ -26,10 +29,15 @@ export default async function IntervalPage({
     notFound();
   }
 
+  const scientificContent =
+    getIntervalContent(slug);
+
   return (
     <section className="page-container interval-page">
       <div className="breadcrumbs">
-        <Link href="/">GIULIA</Link>
+        <Link href="/">
+          GIULIA
+        </Link>
 
         {path.map((item) => (
           <span key={item.id}>
@@ -62,7 +70,10 @@ export default async function IntervalPage({
       </span>
 
       <div className="big-time">
-        {interval.startMa.toLocaleString("pt-BR")} Ma
+        {interval.startMa.toLocaleString(
+          "pt-BR"
+        )}{" "}
+        Ma
 
         <span>→</span>
 
@@ -91,6 +102,12 @@ export default async function IntervalPage({
         </span>
       </div>
 
+      {scientificContent && (
+        <IntervalExplorer
+          content={scientificContent}
+        />
+      )}
+
       {interval.children &&
         interval.children.length > 0 && (
           <div className="children-section">
@@ -104,18 +121,20 @@ export default async function IntervalPage({
               </h2>
 
               <p>
-                Selecione uma subdivisão para avançar na
-                escala temporal.
+                Selecione uma subdivisão para
+                avançar na escala temporal.
               </p>
             </div>
 
             <div className="time-grid">
-              {interval.children.map((child) => (
-                <TimeBlock
-                  key={child.id}
-                  interval={child}
-                />
-              ))}
+              {interval.children.map(
+                (child) => (
+                  <TimeBlock
+                    key={child.id}
+                    interval={child}
+                  />
+                )
+              )}
             </div>
           </div>
         )}
