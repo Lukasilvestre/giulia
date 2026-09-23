@@ -26,9 +26,9 @@ export default function Navbar() {
           Tempo
         </Link>
 
-        <span className="disabled-link">
+        <Link href="/paleoearth">
           Terra
-        </span>
+        </Link>
 
         <span className="disabled-link">
           Vida

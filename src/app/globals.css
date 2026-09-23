@@ -2659,3 +2659,521 @@ a {
     min-height: 430px;
   }
 }
+
+/* =========================================================
+   GIULIA v0.6 - PALEOEARTH
+   ========================================================= */
+
+.paleoearth-page {
+  max-width: 1450px;
+  margin: auto;
+  padding: 100px 8vw 150px;
+}
+
+.paleoearth-hero {
+  max-width: 1000px;
+}
+
+.paleoearth-hero h1 {
+  max-width: 950px;
+
+  margin: 15px 0 28px;
+
+  font-size:
+    clamp(3.5rem, 7vw, 7.5rem);
+
+  line-height: 0.94;
+
+  font-weight: 400;
+
+  letter-spacing: -0.06em;
+}
+
+.paleoearth-hero p {
+  max-width: 760px;
+
+  color: var(--text-secondary);
+
+  font-size: 1.15rem;
+
+  line-height: 1.8;
+}
+
+.paleoearth-principle {
+  display: flex;
+  align-items: center;
+
+  gap: 25px;
+
+  margin-top: 70px;
+
+  padding: 25px;
+
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.paleoearth-principle > div:not(
+  .principle-arrow
+) {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.paleoearth-principle span {
+  color: var(--accent);
+
+  font-family: monospace;
+
+  font-size: 0.68rem;
+}
+
+.paleoearth-principle strong {
+  font-size: 0.84rem;
+
+  font-weight: 500;
+}
+
+.principle-arrow {
+  color: #50605a;
+}
+
+.paleoearth-explorer {
+  margin-top: 80px;
+}
+
+.paleoearth-controls {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(150px, 1fr))
+    auto;
+
+  gap: 12px;
+
+  align-items: end;
+
+  padding: 25px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.paleoearth-controls > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.paleoearth-controls label {
+  color: var(--text-secondary);
+
+  font-size: 0.63rem;
+
+  letter-spacing: 0.11em;
+
+  text-transform: uppercase;
+}
+
+.paleoearth-controls input {
+  min-height: 48px;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--border);
+
+  outline: none;
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font: inherit;
+}
+
+.paleoearth-controls input:focus {
+  border-color:
+    rgba(214,198,132,0.65);
+}
+
+.paleoearth-controls button {
+  min-height: 48px;
+
+  padding: 0 20px;
+
+  border: 1px solid var(--accent);
+
+  background: var(--accent);
+
+  color: #111713;
+
+  font: inherit;
+
+  font-size: 0.8rem;
+
+  cursor: pointer;
+}
+
+.paleoearth-controls button:disabled {
+  opacity: 0.55;
+
+  cursor: wait;
+}
+
+.paleoearth-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.paleoearth-presets > span {
+  color: var(--text-secondary);
+
+  font-size: 0.68rem;
+}
+
+.paleoearth-presets button {
+  padding: 6px 9px;
+
+  border: 1px solid var(--border);
+
+  background: transparent;
+
+  color: var(--text-secondary);
+
+  font: inherit;
+
+  font-size: 0.68rem;
+
+  cursor: pointer;
+}
+
+.paleoearth-presets button:hover {
+  color: var(--accent);
+}
+
+.paleoearth-placeholder {
+  min-height: 480px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-top: 65px;
+
+  padding: 7vw;
+
+  border: 1px solid var(--border);
+
+  background:
+    radial-gradient(
+      circle at 65% 45%,
+      rgba(70,115,91,0.13),
+      transparent 32%
+    ),
+    var(--surface);
+}
+
+.paleoearth-placeholder > span {
+  color:
+    rgba(255,255,255,0.12);
+
+  font-size:
+    clamp(2rem, 5vw, 5rem);
+
+  font-weight: 700;
+
+  letter-spacing: 0.25em;
+}
+
+.paleoearth-placeholder h2 {
+  max-width: 750px;
+
+  margin: 25px 0;
+
+  font-size:
+    clamp(2rem, 4vw, 4rem);
+
+  font-weight: 400;
+
+  letter-spacing: -0.04em;
+}
+
+.paleoearth-placeholder p {
+  max-width: 680px;
+
+  color: var(--text-secondary);
+
+  line-height: 1.8;
+}
+
+.paleoearth-error {
+  margin-top: 45px;
+
+  padding: 25px;
+
+  border: 1px solid
+    rgba(190,90,70,0.4);
+
+  background:
+    rgba(190,90,70,0.05);
+}
+
+.paleoearth-error strong {
+  color: #d78a78;
+}
+
+.paleoearth-error p {
+  margin-bottom: 0;
+
+  color: var(--text-secondary);
+}
+
+.paleoearth-result {
+  margin-top: 80px;
+}
+
+.paleoearth-result-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 40px;
+}
+
+.paleoearth-result-header h2 {
+  margin: 10px 0;
+
+  font-size:
+    clamp(3rem, 6vw, 6rem);
+
+  line-height: 0.95;
+
+  font-weight: 400;
+
+  letter-spacing: -0.05em;
+}
+
+.paleoearth-result-header p {
+  color: var(--text-secondary);
+}
+
+.paleoearth-model {
+  display: flex;
+  flex-direction: column;
+
+  text-align: right;
+}
+
+.paleoearth-model span {
+  color: var(--text-secondary);
+
+  font-size: 0.6rem;
+
+  letter-spacing: 0.15em;
+}
+
+.paleoearth-model strong {
+  margin-top: 6px;
+
+  color: var(--accent);
+
+  font-size: 0.8rem;
+
+  font-weight: 500;
+}
+
+.paleoearth-comparison {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  gap: 25px;
+
+  margin-bottom: 25px;
+}
+
+.paleoearth-comparison article {
+  min-height: 145px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 22px;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.paleoearth-comparison article span {
+  color: var(--text-secondary);
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.12em;
+}
+
+.paleoearth-comparison article strong {
+  margin-top: auto;
+
+  padding-top: 25px;
+
+  color: var(--accent);
+
+  font-family: monospace;
+
+  font-size: 1.2rem;
+
+  font-weight: 400;
+}
+
+.paleoearth-comparison article small {
+  margin-top: 6px;
+
+  color: var(--text-secondary);
+}
+
+.paleoearth-arrow {
+  color: var(--accent);
+
+  font-size: 1.4rem;
+}
+
+.paleoearth-map {
+  width: 100%;
+  height: 620px;
+
+  border: 1px solid var(--border);
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #0e1c18,
+      #050c0a
+    );
+
+  z-index: 1;
+}
+
+.paleoearth-map .leaflet-container {
+  background: transparent;
+}
+
+.paleoearth-map .leaflet-control-zoom a {
+  background: #101b18;
+
+  color: var(--text);
+
+  border-color: var(--border);
+}
+
+.paleoearth-map .leaflet-tooltip {
+  background: #0d1815;
+
+  border: 1px solid var(--border);
+
+  color: var(--text);
+
+  box-shadow: none;
+}
+
+.paleoearth-method-note {
+  max-width: 850px;
+
+  display: grid;
+
+  grid-template-columns:
+    160px 1fr;
+
+  gap: 30px;
+
+  margin-top: 35px;
+
+  padding: 24px;
+
+  border-left:
+    3px solid var(--accent);
+
+  background:
+    rgba(255,255,255,0.025);
+}
+
+.paleoearth-method-note span {
+  color: var(--accent);
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.14em;
+}
+
+.paleoearth-method-note p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+
+  font-size: 0.88rem;
+}
+
+@media (max-width: 900px) {
+  .paleoearth-controls {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .paleoearth-controls button {
+    grid-column:
+      1 / -1;
+  }
+}
+
+@media (max-width: 650px) {
+  .paleoearth-principle {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .principle-arrow {
+    transform:
+      rotate(90deg);
+  }
+
+  .paleoearth-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .paleoearth-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .paleoearth-arrow {
+    transform:
+      rotate(90deg);
+
+    text-align: center;
+  }
+
+  .paleoearth-map {
+    height: 440px;
+  }
+
+  .paleoearth-method-note {
+    grid-template-columns: 1fr;
+  }
+}
