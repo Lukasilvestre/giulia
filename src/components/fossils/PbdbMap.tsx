@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   useEffect,
   useMemo,
@@ -11,6 +13,14 @@ import type {
   PbdbOccurrence,
 } from "@/types/pbdb";
 
+import {
+  buildPaleoEarthUrl,
+  getOccurrenceAgeLabel,
+  getOccurrenceCoordinates,
+  getOccurrenceName,
+  getOccurrenceReconstructionAge,
+} from "@/lib/pbdb-utils";
+
 interface PbdbMapProps {
   records: PbdbOccurrence[];
 }
@@ -19,62 +29,6 @@ interface GeoOccurrence {
   record: PbdbOccurrence;
   lat: number;
   lng: number;
-}
-
-function toCoordinate(
-  value: string | number | undefined
-): number | null {
-  if (
-    value === undefined ||
-    value === null ||
-    value === ""
-  ) {
-    return null;
-  }
-
-  const parsed = Number(value);
-
-  if (!Number.isFinite(parsed)) {
-    return null;
-  }
-
-  return parsed;
-}
-
-function getOccurrenceName(
-  occurrence: PbdbOccurrence
-) {
-  return (
-    occurrence.accepted_name ??
-    occurrence.identified_name ??
-    "Táxon não informado"
-  );
-}
-
-function getOccurrenceAge(
-  occurrence: PbdbOccurrence
-) {
-  if (
-    occurrence.max_ma !== undefined &&
-    occurrence.min_ma !== undefined
-  ) {
-    return `${occurrence.max_ma} – ${occurrence.min_ma} Ma`;
-  }
-
-  if (
-    occurrence.early_interval &&
-    occurrence.late_interval &&
-    occurrence.early_interval !==
-      occurrence.late_interval
-  ) {
-    return `${occurrence.early_interval} – ${occurrence.late_interval}`;
-  }
-
-  return (
-    occurrence.early_interval ??
-    occurrence.late_interval ??
-    "Idade não informada"
-  );
 }
 
 export default function PbdbMap({
@@ -88,53 +42,47 @@ export default function PbdbMap({
   const [
     selected,
     setSelected,
-  ] = useState<PbdbOccurrence | null>(
-    null
-  );
+  ] =
+    useState<PbdbOccurrence | null>(
+      null
+    );
 
   const geoOccurrences =
-    useMemo<GeoOccurrence[]>(() => {
-      return records
-        .map((record) => {
-          const lat =
-            toCoordinate(
-              record.lat
-            );
+    useMemo<GeoOccurrence[]>(
+      () => {
+        return records
+          .map((record) => {
+            const coordinates =
+              getOccurrenceCoordinates(
+                record
+              );
 
-          const lng =
-            toCoordinate(
-              record.lng
-            );
+            if (
+              !coordinates
+            ) {
+              return null;
+            }
 
-          if (
-            lat === null ||
-            lng === null ||
-            lat < -90 ||
-            lat > 90 ||
-            lng < -180 ||
-            lng > 180
-          ) {
-            return null;
-          }
-
-          return {
-            record,
-            lat,
-            lng,
-          };
-        })
-        .filter(
-          (
-            item
-          ): item is GeoOccurrence =>
-            item !== null
-        );
-    }, [records]);
+            return {
+              record,
+              ...coordinates,
+            };
+          })
+          .filter(
+            (
+              item
+            ): item is GeoOccurrence =>
+              item !== null
+          );
+      },
+      [records]
+    );
 
   useEffect(() => {
     if (
       !mapElement.current ||
-      geoOccurrences.length === 0
+      geoOccurrences.length ===
+        0
     ) {
       return;
     }
@@ -147,7 +95,9 @@ export default function PbdbMap({
 
     async function initializeMap() {
       const L =
-        await import("leaflet");
+        await import(
+          "leaflet"
+        );
 
       if (
         disposed ||
@@ -160,7 +110,9 @@ export default function PbdbMap({
         L.map(
           mapElement.current,
           {
-            worldCopyJump: true,
+            worldCopyJump:
+              true,
+
             minZoom: 2,
           }
         ).setView(
@@ -176,10 +128,13 @@ export default function PbdbMap({
           attribution:
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }
-      ).addTo(mapInstance);
+      ).addTo(
+        mapInstance
+      );
 
       const coordinates:
-        [number, number][] = [];
+        [number, number][] =
+        [];
 
       for (
         const occurrence
@@ -189,7 +144,8 @@ export default function PbdbMap({
           record,
           lat,
           lng,
-        } = occurrence;
+        } =
+          occurrence;
 
         coordinates.push([
           lat,
@@ -209,7 +165,7 @@ export default function PbdbMap({
                 "#d6c684",
 
               fillOpacity:
-                0.72,
+                0.75,
 
               weight: 1.5,
             }
@@ -224,7 +180,8 @@ export default function PbdbMap({
             record
           ),
           {
-            direction: "top",
+            direction:
+              "top",
           }
         );
 
@@ -260,7 +217,8 @@ export default function PbdbMap({
         mapInstance.fitBounds(
           bounds,
           {
-            padding: [35, 35],
+            padding:
+              [35, 35],
 
             maxZoom: 6,
           }
@@ -281,14 +239,15 @@ export default function PbdbMap({
     return () => {
       disposed = true;
 
-      if (mapInstance) {
-        mapInstance.remove();
-      }
+      mapInstance?.remove();
     };
-  }, [geoOccurrences]);
+  }, [
+    geoOccurrences,
+  ]);
 
   if (
-    geoOccurrences.length === 0
+    geoOccurrences.length ===
+    0
   ) {
     return (
       <section className="pbdb-map-empty">
@@ -302,21 +261,36 @@ export default function PbdbMap({
         </h3>
 
         <p>
-          Os registros retornados nesta
-          consulta não possuem
-          coordenadas geográficas
+          Os registros
+          retornados não
+          possuem coordenadas
           utilizáveis.
         </p>
       </section>
     );
   }
 
+  const paleoUrl =
+    selected
+      ? buildPaleoEarthUrl(
+          selected
+        )
+      : null;
+
+  const reconstructionAge =
+    selected
+      ? getOccurrenceReconstructionAge(
+          selected
+        )
+      : null;
+
   return (
     <section className="pbdb-map-section">
       <header className="pbdb-map-header">
         <div>
           <span className="eyebrow">
-            OCCURRENCE MAP
+            PRESENT-DAY
+            LOCALITIES
           </span>
 
           <h3>
@@ -325,8 +299,8 @@ export default function PbdbMap({
           </h3>
 
           <p>
-            Localidades atuais de
-            registros cadastrados na
+            Localidades atuais
+            registradas na
             Paleobiology Database.
           </p>
         </div>
@@ -346,29 +320,33 @@ export default function PbdbMap({
 
       <div className="pbdb-map-layout">
         <div
-          ref={mapElement}
+          ref={
+            mapElement
+          }
           className="pbdb-map"
-          aria-label="Mapa das ocorrências fósseis"
         />
 
         <aside className="pbdb-map-sidebar">
           {!selected ? (
             <div className="pbdb-map-instruction">
               <span>
-                SELECIONE UM PONTO
+                SELECIONE UM
+                PONTO
               </span>
 
               <p>
                 Clique em uma
-                ocorrência no mapa para
+                ocorrência para
                 visualizar seus
-                metadados.
+                dados e reconstruí-la
+                paleogeograficamente.
               </p>
             </div>
           ) : (
             <div className="pbdb-selected-occurrence">
               <span className="eyebrow">
-                SELECTED OCCURRENCE
+                SELECTED
+                OCCURRENCE
               </span>
 
               <h4>
@@ -389,7 +367,7 @@ export default function PbdbMap({
 
                   <strong>
                     {
-                      getOccurrenceAge(
+                      getOccurrenceAgeLabel(
                         selected
                       )
                     }
@@ -464,7 +442,7 @@ export default function PbdbMap({
 
                 <div>
                   <span>
-                    PBDB occurrence
+                    PBDB
                   </span>
 
                   <strong>
@@ -475,22 +453,53 @@ export default function PbdbMap({
                   </strong>
                 </div>
               </div>
+
+              {paleoUrl &&
+                reconstructionAge !==
+                  null && (
+                  <div className="paleoearth-transfer">
+                    <span>
+                      RECONSTRUÇÃO
+                    </span>
+
+                    <p>
+                      Usaremos{" "}
+                      <strong>
+                        {
+                          reconstructionAge
+                        }{" "}
+                        Ma
+                      </strong>{" "}
+                      como idade
+                      representativa
+                      desta ocorrência.
+                    </p>
+
+                    <Link
+                      href={
+                        paleoUrl
+                      }
+                      className="paleoearth-transfer-button"
+                    >
+                      Ver no
+                      PaleoEarth →
+                    </Link>
+                  </div>
+                )}
             </div>
           )}
 
           <div className="pbdb-map-warning">
             <strong>
-              Coordenada atual
+              Localidade atual
             </strong>
 
             <p>
-              Estes pontos representam
-              a localização geográfica
-              cadastrada para a
-              ocorrência fóssil. Eles
-              ainda não representam a
-              posição paleogeográfica
-              do organismo.
+              O ponto neste mapa
+              representa a
+              coordenada moderna
+              associada ao registro
+              fóssil.
             </p>
           </div>
         </aside>

@@ -1,11 +1,17 @@
 "use client";
 
 import {
-  FormEvent,
+  type FormEvent,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 
 import PbdbMap from "@/components/fossils/PbdbMap";
+
+import {
+  buildPaleoEarthUrl,
+} from "@/lib/pbdb-utils";
 
 import type {
   PbdbOccurrence,
@@ -15,6 +21,7 @@ import type {
 interface PbdbSearchProps {
   initialTaxon?: string;
   initialInterval?: string;
+  autoSearch?: boolean;
 }
 
 function valueOrDash(
@@ -82,6 +89,7 @@ function formatAge(
 export default function PbdbSearch({
   initialTaxon = "",
   initialInterval = "",
+  autoSearch = false,
 }: PbdbSearchProps) {
   const [taxon, setTaxon] =
     useState(initialTaxon);
@@ -89,28 +97,43 @@ export default function PbdbSearch({
   const [
     interval,
     setInterval,
-  ] = useState(initialInterval);
+  ] =
+    useState(initialInterval);
 
-  const [result, setResult] =
+  const [
+    result,
+    setResult,
+  ] =
     useState<PbdbSearchResult | null>(
       null
     );
 
-  const [loading, setLoading] =
+  const [
+    loading,
+    setLoading,
+  ] =
     useState(false);
 
-  const [error, setError] =
+  const [
+    error,
+    setError,
+  ] =
     useState<string | null>(
       null
     );
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
+  const automaticSearchExecuted =
+    useRef(false);
 
+  async function runSearch(
+    searchTaxon: string,
+    searchInterval: string
+  ) {
     const cleanTaxon =
-      taxon.trim();
+      searchTaxon.trim();
+
+    const cleanInterval =
+      searchInterval.trim();
 
     if (!cleanTaxon) {
       setError(
@@ -126,16 +149,19 @@ export default function PbdbSearch({
     try {
       const params =
         new URLSearchParams({
-          taxon: cleanTaxon,
-          limit: "50",
+          taxon:
+            cleanTaxon,
+
+          limit:
+            "50",
         });
 
       if (
-        interval.trim()
+        cleanInterval
       ) {
         params.set(
           "interval",
-          interval.trim()
+          cleanInterval
         );
       }
 
@@ -150,7 +176,8 @@ export default function PbdbSearch({
       let data: unknown;
 
       try {
-        data = JSON.parse(raw);
+        data =
+          JSON.parse(raw);
       } catch {
         throw new Error(
           `A API retornou uma resposta inválida (HTTP ${response.status}).`
@@ -183,6 +210,39 @@ export default function PbdbSearch({
     } finally {
       setLoading(false);
     }
+  }
+
+  useEffect(() => {
+    if (
+      !autoSearch ||
+      !initialTaxon ||
+      automaticSearchExecuted.current
+    ) {
+      return;
+    }
+
+    automaticSearchExecuted.current =
+      true;
+
+    void runSearch(
+      initialTaxon,
+      initialInterval
+    );
+  }, [
+    autoSearch,
+    initialTaxon,
+    initialInterval,
+  ]);
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    await runSearch(
+      taxon,
+      interval
+    );
   }
 
   return (
@@ -263,6 +323,24 @@ export default function PbdbSearch({
         ))}
       </div>
 
+      {loading && (
+        <div className="pbdb-loading">
+          <span className="eyebrow">
+            PALEOBIOLOGY DATABASE
+          </span>
+
+          <h3>
+            Consultando registros fósseis...
+          </h3>
+
+          <p>
+            Buscando ocorrências,
+            localidades e dados
+            estratigráficos.
+          </p>
+        </div>
+      )}
+
       {error && (
         <div className="pbdb-error">
           <strong>
@@ -273,7 +351,7 @@ export default function PbdbSearch({
         </div>
       )}
 
-      {result && (
+      {result && !loading && (
         <div className="pbdb-results">
           <header className="pbdb-results-header">
             <div>
@@ -289,13 +367,8 @@ export default function PbdbSearch({
                 {result.count.toLocaleString(
                   "pt-BR"
                 )}{" "}
-                ocorrência(s) encontrada(s).
-                A interface mostra até{" "}
-                {
-                  result.query
-                    .limit
-                }{" "}
-                registros por consulta.
+                ocorrência(s) retornada(s)
+                nesta consulta.
               </p>
             </div>
 
@@ -305,9 +378,6 @@ export default function PbdbSearch({
             </div>
           </header>
 
-          
-          <PbdbMap records={result.records} />
-
           {result.records.length ===
           0 ? (
             <div className="pbdb-empty">
@@ -316,139 +386,163 @@ export default function PbdbSearch({
               filtros.
             </div>
           ) : (
-            <div className="pbdb-record-list">
-              {result.records.map(
-                (
-                  occurrence,
-                  index
-                ) => {
-                  const name =
-                    occurrence.accepted_name ??
-                    occurrence.identified_name ??
-                    "Táxon não informado";
-
-                  return (
-                    <article
-                      key={`${occurrence.occurrence_no}-${index}`}
-                      className="pbdb-record"
-                    >
-                      <div className="pbdb-record-number">
-                        {String(
-                          index + 1
-                        ).padStart(
-                          2,
-                          "0"
-                        )}
-                      </div>
-
-                      <div className="pbdb-record-main">
-                        <span className="pbdb-record-rank">
-                          {valueOrDash(
-                            occurrence.accepted_rank
-                          )}
-                        </span>
-
-                        <h3>
-                          <i>
-                            {name}
-                          </i>
-                        </h3>
-
-                        {occurrence.identified_name &&
-                          occurrence.identified_name !==
-                            name && (
-                            <small>
-                              Identificado
-                              como:{" "}
-                              {
-                                occurrence.identified_name
-                              }
-                            </small>
-                          )}
-
-                        <div className="pbdb-record-tags">
-                          <span>
-                            {formatAge(
-                              occurrence
-                            )}
-                          </span>
-
-                          {occurrence.cc && (
-                            <span>
-                              {
-                                occurrence.cc
-                              }
-                            </span>
-                          )}
-
-                          {occurrence.state && (
-                            <span>
-                              {
-                                occurrence.state
-                              }
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="pbdb-record-details">
-                        <div>
-                          <span>
-                            Formação
-                          </span>
-
-                          <strong>
-                            {valueOrDash(
-                              occurrence.formation
-                            )}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>
-                            Ambiente
-                          </span>
-
-                          <strong>
-                            {valueOrDash(
-                              occurrence.environment
-                            )}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>
-                            Coordenadas
-                          </span>
-
-                          <strong>
-                            {occurrence.lat !==
-                              undefined &&
-                            occurrence.lng !==
-                              undefined
-                              ? `${occurrence.lat}, ${occurrence.lng}`
-                              : "—"}
-                          </strong>
-                        </div>
-
-                        <div>
-                          <span>
-                            PBDB occurrence
-                          </span>
-
-                          <strong>
-                            #
-                            {
-                              occurrence.occurrence_no
-                            }
-                          </strong>
-                        </div>
-                      </div>
-                    </article>
-                  );
+            <>
+              <PbdbMap
+                records={
+                  result.records
                 }
-              )}
-            </div>
+              />
+
+              <div className="pbdb-record-list">
+                {result.records.map(
+                  (
+                    occurrence,
+                    index
+                  ) => {
+                    const name =
+                      occurrence.accepted_name ??
+                      occurrence.identified_name ??
+                      "Táxon não informado";
+
+                    const paleoUrl =
+                      buildPaleoEarthUrl(
+                        occurrence
+                      );
+
+                    return (
+                      <article
+                        key={`${occurrence.occurrence_no}-${index}`}
+                        className="pbdb-record"
+                      >
+                        <div className="pbdb-record-number">
+                          {String(
+                            index + 1
+                          ).padStart(
+                            2,
+                            "0"
+                          )}
+                        </div>
+
+                        <div className="pbdb-record-main">
+                          <span className="pbdb-record-rank">
+                            {valueOrDash(
+                              occurrence.accepted_rank
+                            )}
+                          </span>
+
+                          <h3>
+                            <i>
+                              {name}
+                            </i>
+                          </h3>
+
+                          {occurrence.identified_name &&
+                            occurrence.identified_name !==
+                              name && (
+                              <small>
+                                Identificado como:{" "}
+                                {
+                                  occurrence.identified_name
+                                }
+                              </small>
+                            )}
+
+                          <div className="pbdb-record-tags">
+                            <span>
+                              {formatAge(
+                                occurrence
+                              )}
+                            </span>
+
+                            {occurrence.cc && (
+                              <span>
+                                {
+                                  occurrence.cc
+                                }
+                              </span>
+                            )}
+
+                            {occurrence.state && (
+                              <span>
+                                {
+                                  occurrence.state
+                                }
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="pbdb-record-details">
+                          <div>
+                            <span>
+                              Formação
+                            </span>
+
+                            <strong>
+                              {valueOrDash(
+                                occurrence.formation
+                              )}
+                            </strong>
+                          </div>
+
+                          <div>
+                            <span>
+                              Ambiente
+                            </span>
+
+                            <strong>
+                              {valueOrDash(
+                                occurrence.environment
+                              )}
+                            </strong>
+                          </div>
+
+                          <div>
+                            <span>
+                              Coordenadas
+                            </span>
+
+                            <strong>
+                              {occurrence.lat !==
+                                undefined &&
+                              occurrence.lng !==
+                                undefined
+                                ? `${occurrence.lat}, ${occurrence.lng}`
+                                : "—"}
+                            </strong>
+                          </div>
+
+                          <div>
+                            <span>
+                              PBDB occurrence
+                            </span>
+
+                            <strong>
+                              #
+                              {
+                                occurrence.occurrence_no
+                              }
+                            </strong>
+                          </div>
+
+                          {paleoUrl && (
+                            <a
+                              href={
+                                paleoUrl
+                              }
+                              className="pbdb-paleo-link"
+                            >
+                              Reconstruir no
+                              PaleoEarth →
+                            </a>
+                          )}
+                        </div>
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </>
           )}
 
           <footer className="pbdb-source-footer">

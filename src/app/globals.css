@@ -3177,3 +3177,442 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   GIULIA v0.7 - INTEGRATED EXPLORATION
+   ========================================================= */
+
+.paleoearth-transfer {
+  margin-top: 28px;
+
+  padding: 18px;
+
+  border:
+    1px solid
+    rgba(214,198,132,0.28);
+
+  background:
+    rgba(214,198,132,0.05);
+}
+
+.paleoearth-transfer > span {
+  color: var(--accent);
+
+  font-size: 0.6rem;
+
+  letter-spacing: 0.13em;
+}
+
+.paleoearth-transfer p {
+  color: var(--text-secondary);
+
+  font-size: 0.76rem;
+
+  line-height: 1.6;
+}
+
+.paleoearth-transfer-button {
+  display: inline-block;
+
+  margin-top: 8px;
+
+  color: var(--accent);
+
+  font-size: 0.76rem;
+}
+
+.pbdb-paleo-link {
+  grid-column: 1 / -1;
+
+  display: inline-block;
+
+  margin-top: 14px;
+
+  color: var(--accent);
+
+  font-size: 0.72rem;
+}
+
+.organism-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 35px;
+}
+
+.organism-primary-action,
+.organism-secondary-action {
+  padding: 13px 18px;
+
+  font-size: 0.78rem;
+}
+
+.organism-primary-action {
+  background:
+    var(--accent);
+
+  color: #101612;
+}
+
+.organism-secondary-action {
+  border:
+    1px solid
+    var(--border);
+}
+
+.organisms-index {
+  max-width: 1450px;
+
+  margin: auto;
+
+  padding:
+    100px 8vw 150px;
+}
+
+.organisms-index-hero {
+  max-width: 950px;
+}
+
+.organisms-index-hero h1 {
+  margin:
+    15px 0 25px;
+
+  font-size:
+    clamp(
+      3.5rem,
+      7vw,
+      7rem
+    );
+
+  line-height: 0.95;
+
+  font-weight: 400;
+
+  letter-spacing:
+    -0.055em;
+}
+
+.organisms-index-hero p {
+  max-width: 700px;
+
+  color:
+    var(--text-secondary);
+
+  font-size: 1.1rem;
+
+  line-height: 1.8;
+}
+
+.organisms-index-meta {
+  display: flex;
+  justify-content:
+    space-between;
+
+  margin-top: 70px;
+
+  padding:
+    18px 0;
+
+  border-top:
+    1px solid
+    var(--border);
+
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+.organisms-index-meta span {
+  color:
+    var(--text-secondary);
+
+  font-size: 0.63rem;
+
+  letter-spacing:
+    0.14em;
+}
+
+.organisms-index-meta strong {
+  color:
+    var(--accent);
+
+  font-weight: 400;
+
+  font-size: 0.85rem;
+}
+
+.organism-index-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        300px,
+        1fr
+      )
+    );
+
+  gap: 18px;
+
+  margin-top: 35px;
+}
+
+.organism-index-card {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--border);
+
+  background:
+    var(--surface);
+
+  transition: 0.25s;
+}
+
+.organism-index-card:hover {
+  transform:
+    translateY(-4px);
+
+  background:
+    var(--surface-light);
+}
+
+.organism-index-visual {
+  height: 190px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(
+        214,
+        198,
+        132,
+        0.15
+      ),
+      transparent 60%
+    ),
+    #091310;
+}
+
+.organism-index-visual span {
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+
+  font-size: 1rem;
+
+  font-weight: 700;
+
+  letter-spacing:
+    0.22em;
+
+  text-transform:
+    uppercase;
+}
+
+.organism-index-content {
+  padding: 25px;
+}
+
+.organism-index-rank {
+  color:
+    var(--accent);
+
+  font-size: 0.62rem;
+
+  letter-spacing:
+    0.12em;
+
+  text-transform:
+    uppercase;
+}
+
+.organism-index-content h2 {
+  margin:
+    10px 0 8px;
+
+  font-size: 1.65rem;
+
+  font-weight: 500;
+}
+
+.organism-index-time {
+  color:
+    var(--text-secondary);
+
+  font-size: 0.72rem;
+
+  font-family: monospace;
+}
+
+.organism-index-content p {
+  min-height: 100px;
+
+  color:
+    var(--text-secondary);
+
+  font-size: 0.86rem;
+
+  line-height: 1.65;
+}
+
+.organism-index-open {
+  color:
+    var(--accent);
+
+  font-size: 0.73rem;
+}
+
+.paleoearth-origin-context {
+  display: flex;
+
+  align-items: center;
+
+  gap: 30px;
+
+  margin-top: 50px;
+
+  padding: 20px;
+
+  border-left:
+    3px solid
+    #8fd19e;
+
+  background:
+    rgba(
+      143,
+      209,
+      158,
+      0.05
+    );
+}
+
+.paleoearth-origin-context > span {
+  color:
+    #8fd19e;
+
+  font-size: 0.62rem;
+
+  letter-spacing:
+    0.13em;
+}
+
+.paleoearth-origin-context > div {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.paleoearth-origin-context strong {
+  font-weight: 500;
+}
+
+.paleoearth-origin-context small {
+  color:
+    var(--text-secondary);
+}
+
+.paleoearth-reconstruction-source {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 30px;
+
+  padding-bottom: 18px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+.paleoearth-reconstruction-source span {
+  color:
+    #8fd19e;
+
+  font-size: 0.62rem;
+
+  letter-spacing:
+    0.13em;
+}
+
+.paleoearth-reconstruction-source strong {
+  font-weight: 500;
+}
+
+.paleoearth-reconstruction-source small {
+  color:
+    var(--text-secondary);
+}
+
+@media (
+  max-width: 650px
+) {
+  .paleoearth-origin-context {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+  .paleoearth-reconstruction-source {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+}
+
+/* PBDB loading */
+
+.pbdb-loading {
+  margin-top: 45px;
+
+  padding: 35px;
+
+  border: 1px solid var(--border);
+
+  background:
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(214,198,132,0.08),
+      transparent 45%
+    ),
+    var(--surface);
+}
+
+.pbdb-loading h3 {
+  margin: 10px 0;
+
+  font-size: 1.5rem;
+
+  font-weight: 500;
+}
+
+.pbdb-loading p {
+  margin-bottom: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+}

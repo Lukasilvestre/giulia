@@ -30,9 +30,9 @@ export default function Navbar() {
           Terra
         </Link>
 
-        <span className="disabled-link">
+        <Link href="/organisms">
           Vida
-        </span>
+        </Link>
 
         <Link href="/fossils">
           Fósseis

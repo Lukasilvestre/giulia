@@ -402,15 +402,36 @@ async function getJson(
   return data;
 }
 
-export default function PaleoEarthExplorer() {
+interface PaleoEarthExplorerProps {
+  initialLat?: string;
+  initialLng?: string;
+  initialTime?: string;
+  sourceTaxon?: string;
+  sourceOccurrence?: string;
+  autoReconstruct?: boolean;
+}
+
+export default function PaleoEarthExplorer({
+  initialLat,
+  initialLng,
+  initialTime,
+  sourceTaxon,
+  sourceOccurrence,
+  autoReconstruct = false,
+}: PaleoEarthExplorerProps) {
+  const autoRun =
+    useRef(false);
+
+  const reconstructionForm =
+    useRef<HTMLFormElement | null>(null);
   const [lat, setLat] =
-    useState("45");
+    useState(initialLat ?? "45");
 
   const [lng, setLng] =
-    useState("-104");
+    useState(initialLng ?? "-104");
 
   const [time, setTime] =
-    useState("67");
+    useState(initialTime ?? "67");
 
   const [
     reconstruction,
@@ -449,6 +470,16 @@ export default function PaleoEarthExplorer() {
     useState<string | null>(
       null
     );
+
+  useEffect(() => {
+    if (
+      autoReconstruct &&
+      !autoRun.current
+    ) {
+      autoRun.current = true;
+      reconstructionForm.current?.requestSubmit();
+    }
+  }, [autoReconstruct]);
 
   async function reconstruct(
     event:
@@ -581,6 +612,7 @@ export default function PaleoEarthExplorer() {
   return (
     <div className="paleoearth-explorer">
       <form
+        ref={reconstructionForm}
         className="paleoearth-controls"
         onSubmit={
           reconstruct
@@ -752,6 +784,30 @@ export default function PaleoEarthExplorer() {
         coastlines &&
         paleoPoint && (
           <div className="paleoearth-result">
+            {(sourceTaxon ||
+              sourceOccurrence) && (
+              <div className="paleoearth-reconstruction-source">
+                <span>
+                  RECONSTRUÇÃO DE OCORRÊNCIA
+                </span>
+
+                {sourceTaxon && (
+                  <strong>
+                    <i>
+                      {sourceTaxon}
+                    </i>
+                  </strong>
+                )}
+
+                {sourceOccurrence && (
+                  <small>
+                    PBDB #
+                    {sourceOccurrence}
+                  </small>
+                )}
+              </div>
+            )}
+
             <header className="paleoearth-result-header">
               <div>
                 <span className="eyebrow">

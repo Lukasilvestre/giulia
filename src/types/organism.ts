@@ -20,6 +20,8 @@ export interface Organism {
 
   group: string;
 
+  pbdbTaxon?: string;
+
   temporalRange: {
     startMa: number;
     endMa: number;

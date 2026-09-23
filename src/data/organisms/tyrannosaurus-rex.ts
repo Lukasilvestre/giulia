@@ -13,6 +13,8 @@ export const tyrannosaurusRex: Organism = {
 
   group: "Theropoda",
 
+  pbdbTaxon: "Tyrannosaurus",
+
   temporalRange: {
     startMa: 68,
     endMa: 66,

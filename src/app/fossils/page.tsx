@@ -13,6 +13,12 @@ export default async function FossilsPage({
   const params =
     await searchParams;
 
+  const initialTaxon =
+    params.taxon ?? "";
+
+  const initialInterval =
+    params.interval ?? "";
+
   return (
     <section className="fossils-page">
       <header className="fossils-hero">
@@ -21,39 +27,52 @@ export default async function FossilsPage({
         </span>
 
         <h1>
-          Explore o registro fóssil.
+          Explore o registro
+          fóssil.
         </h1>
 
         <p>
           Consulte ocorrências
-          paleontológicas diretamente da
-          Paleobiology Database por táxon
-          e intervalo geológico.
+          paleontológicas diretamente
+          da Paleobiology Database e
+          transporte registros com
+          coordenadas para uma
+          reconstrução
+          paleogeográfica.
         </p>
       </header>
 
       <div className="pbdb-scientific-note">
         <span>
-          SOBRE OS DADOS
+          INTERPRETAÇÃO
         </span>
 
         <p>
-          Uma ocorrência representa um
-          registro cadastrado na base de
-          dados. O número de ocorrências
-          não deve ser interpretado
-          diretamente como abundância
-          biológica ou como um inventário
-          completo do registro fóssil.
+          Ocorrências da PBDB são
+          registros do banco de dados,
+          não medidas diretas de
+          abundância biológica. Quando
+          um registro possui apenas
+          limites mínimo e máximo de
+          idade, o GIULIA utiliza o
+          ponto médio desse intervalo
+          apenas como idade
+          representativa para a
+          reconstrução tectônica.
         </p>
       </div>
 
       <PbdbSearch
         initialTaxon={
-          params.taxon ?? ""
+          initialTaxon
         }
         initialInterval={
-          params.interval ?? ""
+          initialInterval
+        }
+        autoSearch={
+          Boolean(
+            initialTaxon
+          )
         }
       />
     </section>

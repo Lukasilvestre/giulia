@@ -36,6 +36,10 @@ export default async function OrganismPage({
     organism.temporalRange.startMa -
     organism.temporalRange.endMa;
 
+  const pbdbTaxon =
+    organism.pbdbTaxon ??
+    organism.scientificName;
+
   return (
     <section className="organism-page">
       <div className="organism-breadcrumbs">
@@ -77,6 +81,24 @@ export default async function OrganismPage({
           <p>
             {organism.description}
           </p>
+
+          <div className="organism-actions">
+            <Link
+              href={`/fossils?taxon=${encodeURIComponent(
+                pbdbTaxon
+              )}&interval=Cretaceous`}
+              className="organism-primary-action"
+            >
+              Buscar registros fósseis →
+            </Link>
+
+            <Link
+              href={`/interval/${organism.parentInterval.slug}`}
+              className="organism-secondary-action"
+            >
+              Explorar {organism.parentInterval.name}
+            </Link>
+          </div>
         </div>
 
         <div className="organism-visual">

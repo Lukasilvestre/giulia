@@ -13,6 +13,8 @@ export const triceratops: Organism = {
 
   group: "Ceratopsia",
 
+  pbdbTaxon: "Triceratops",
+
   temporalRange: {
     startMa: 68,
     endMa: 66,
