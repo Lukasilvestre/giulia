@@ -33,11 +33,34 @@ export interface FossilEntry {
   description: string;
 }
 
+export interface StratigraphicStage {
+  name: string;
+  namePt: string;
+  startMa: number;
+  endMa: number;
+}
+
+export interface StratigraphicDivision {
+  id: string;
+
+  name: string;
+  namePt: string;
+
+  chronostratigraphicName: string;
+
+  startMa: number;
+  endMa: number;
+
+  stages: StratigraphicStage[];
+}
+
 export interface ScientificReference {
   id: string;
   institution: string;
   title: string;
   role: string;
+
+  url?: string;
 }
 
 export interface IntervalScientificContent {
@@ -47,6 +70,8 @@ export interface IntervalScientificContent {
   summary: string;
 
   facts: ScientificFact[];
+
+  stratigraphy?: StratigraphicDivision[];
 
   earth: ScientificSection;
   climate: ScientificSection;

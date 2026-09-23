@@ -13,6 +13,7 @@ interface IntervalExplorerProps {
 
 type TabId =
   | "overview"
+  | "stratigraphy"
   | "earth"
   | "climate"
   | "life"
@@ -24,13 +25,38 @@ const tabs: {
   id: TabId;
   label: string;
 }[] = [
-  { id: "overview", label: "Visão geral" },
-  { id: "earth", label: "Terra" },
-  { id: "climate", label: "Clima" },
-  { id: "life", label: "Vida" },
-  { id: "events", label: "Eventos" },
-  { id: "fossils", label: "Fósseis" },
-  { id: "references", label: "Referências" },
+  {
+    id: "overview",
+    label: "Visão geral",
+  },
+  {
+    id: "stratigraphy",
+    label: "Escala",
+  },
+  {
+    id: "earth",
+    label: "Terra",
+  },
+  {
+    id: "climate",
+    label: "Clima",
+  },
+  {
+    id: "life",
+    label: "Vida",
+  },
+  {
+    id: "events",
+    label: "Eventos",
+  },
+  {
+    id: "fossils",
+    label: "Fósseis",
+  },
+  {
+    id: "references",
+    label: "Referências",
+  },
 ];
 
 function LifeCard({
@@ -44,7 +70,9 @@ function LifeCard({
         <h4>{item.name}</h4>
 
         {item.subtitle && (
-          <span>{item.subtitle}</span>
+          <span>
+            {item.subtitle}
+          </span>
         )}
       </div>
 
@@ -53,7 +81,10 @@ function LifeCard({
       {item.tags && (
         <div className="tag-list">
           {item.tags.map((tag) => (
-            <span key={tag} className="content-tag">
+            <span
+              key={tag}
+              className="content-tag"
+            >
               {tag}
             </span>
           ))}
@@ -76,28 +107,36 @@ export default function IntervalExplorer({
           SCIENTIFIC DOSSIER
         </span>
 
-        <h2>{content.tagline}</h2>
+        <h2>
+          {content.tagline}
+        </h2>
 
-        <p>{content.summary}</p>
+        <p>
+          {content.summary}
+        </p>
       </div>
 
       <div
         className="explorer-tabs"
         role="tablist"
-        aria-label="Conteúdo do intervalo geológico"
+        aria-label="Conteúdo científico"
       >
         {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
             role="tab"
-            aria-selected={activeTab === tab.id}
+            aria-selected={
+              activeTab === tab.id
+            }
             className={
               activeTab === tab.id
                 ? "explorer-tab active"
                 : "explorer-tab"
             }
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() =>
+              setActiveTab(tab.id)
+            }
           >
             {tab.label}
           </button>
@@ -105,25 +144,32 @@ export default function IntervalExplorer({
       </div>
 
       <div className="explorer-content">
+
         {activeTab === "overview" && (
           <div>
             <div className="fact-grid">
-              {content.facts.map((fact) => (
-                <article
-                  className="fact-card"
-                  key={fact.label}
-                >
-                  <span className="fact-label">
-                    {fact.label}
-                  </span>
+              {content.facts.map(
+                (fact) => (
+                  <article
+                    className="fact-card"
+                    key={fact.label}
+                  >
+                    <span className="fact-label">
+                      {fact.label}
+                    </span>
 
-                  <strong>{fact.value}</strong>
+                    <strong>
+                      {fact.value}
+                    </strong>
 
-                  {fact.detail && (
-                    <small>{fact.detail}</small>
-                  )}
-                </article>
-              ))}
+                    {fact.detail && (
+                      <small>
+                        {fact.detail}
+                      </small>
+                    )}
+                  </article>
+                )
+              )}
             </div>
 
             <div className="overview-note">
@@ -131,7 +177,167 @@ export default function IntervalExplorer({
                 CONTEXTO
               </span>
 
-              <p>{content.summary}</p>
+              <p>
+                {content.summary}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "stratigraphy" && (
+          <div>
+            <div className="content-section-header">
+              <span className="section-index">
+                CHRONOSTRATIGRAPHY
+              </span>
+
+              <h3>
+                Dentro do Cretáceo
+              </h3>
+
+              <p>
+                A escala pode ser explorada
+                progressivamente do período
+                às épocas/séries e,
+                posteriormente, às
+                idades/andares.
+              </p>
+            </div>
+
+            {content.stratigraphy ? (
+              <div className="stratigraphy-container">
+                {content.stratigraphy.map(
+                  (division) => (
+                    <section
+                      key={division.id}
+                      className="stratigraphy-division"
+                    >
+                      <div className="stratigraphy-heading">
+                        <div>
+                          <span className="section-index">
+                            ÉPOCA
+                          </span>
+
+                          <h4>
+                            {division.namePt}
+                          </h4>
+
+                          <span className="stratigraphy-english">
+                            {division.name}
+                          </span>
+                        </div>
+
+                        <div className="stratigraphy-range">
+                          {division.startMa
+                            .toLocaleString(
+                              "pt-BR"
+                            )}{" "}
+                          Ma
+                          <span>→</span>
+                          {division.endMa
+                            .toLocaleString(
+                              "pt-BR"
+                            )}{" "}
+                          Ma
+                        </div>
+                      </div>
+
+                      <div className="chrono-equivalent">
+                        <span>
+                          Equivalente
+                          cronoestratigráfico
+                        </span>
+
+                        <strong>
+                          {
+                            division.chronostratigraphicName
+                          }
+                        </strong>
+                      </div>
+
+                      <div className="stage-list">
+                        {division.stages.map(
+                          (stage) => {
+                            const duration =
+                              stage.startMa -
+                              stage.endMa;
+
+                            return (
+                              <article
+                                key={
+                                  stage.name
+                                }
+                                className="stage-row"
+                              >
+                                <div className="stage-name">
+                                  <strong>
+                                    {
+                                      stage.namePt
+                                    }
+                                  </strong>
+
+                                  <span>
+                                    {
+                                      stage.name
+                                    }
+                                  </span>
+                                </div>
+
+                                <div className="stage-bar-container">
+                                  <div
+                                    className="stage-bar"
+                                    style={{
+                                      width: `${Math.max(
+                                        duration *
+                                          4,
+                                        12
+                                      )}px`,
+                                    }}
+                                  />
+                                </div>
+
+                                <div className="stage-range">
+                                  {stage.startMa.toLocaleString(
+                                    "pt-BR"
+                                  )}
+                                  {" – "}
+                                  {stage.endMa.toLocaleString(
+                                    "pt-BR"
+                                  )}{" "}
+                                  Ma
+                                </div>
+                              </article>
+                            );
+                          }
+                        )}
+                      </div>
+                    </section>
+                  )
+                )}
+              </div>
+            ) : (
+              <p>
+                Escala estratigráfica ainda
+                não cadastrada.
+              </p>
+            )}
+
+            <div className="stratigraphy-note">
+              <strong>
+                Época × Série
+              </strong>
+
+              <p>
+                Early e Late Cretaceous são
+                unidades geocronológicas.
+                Lower e Upper Cretaceous são
+                seus equivalentes
+                cronoestratigráficos.
+                Da mesma forma, uma idade
+                geocronológica corresponde a
+                um andar na
+                cronoestratigrafia.
+              </p>
             </div>
           </div>
         )}
@@ -143,10 +349,15 @@ export default function IntervalExplorer({
                 PALEOGEOGRAFIA
               </span>
 
-              <h3>{content.earth.title}</h3>
+              <h3>
+                {content.earth.title}
+              </h3>
 
               <p className="section-lead">
-                {content.earth.introduction}
+                {
+                  content.earth
+                    .introduction
+                }
               </p>
 
               {content.earth.paragraphs.map(
@@ -170,21 +381,25 @@ export default function IntervalExplorer({
                     className="highlight-item"
                   >
                     <span className="highlight-dot" />
+
                     {highlight}
                   </div>
                 )
               )}
 
               <div className="future-module">
-                <span>PaleoEarth</span>
+                <span>
+                  PaleoEarth
+                </span>
 
                 <strong>
-                  Globo paleogeográfico interativo
+                  Globo paleogeográfico
+                  interativo
                 </strong>
 
                 <small>
-                  Integração planejada com reconstruções
-                  tectônicas.
+                  Integração planejada com
+                  reconstruções tectônicas.
                 </small>
               </div>
             </aside>
@@ -198,10 +413,15 @@ export default function IntervalExplorer({
                 PALEOCLIMA
               </span>
 
-              <h3>{content.climate.title}</h3>
+              <h3>
+                {content.climate.title}
+              </h3>
 
               <p className="section-lead">
-                {content.climate.introduction}
+                {
+                  content.climate
+                    .introduction
+                }
               </p>
 
               {content.climate.paragraphs.map(
@@ -225,6 +445,7 @@ export default function IntervalExplorer({
                     className="highlight-item"
                   >
                     <span className="highlight-dot" />
+
                     {highlight}
                   </div>
                 )
@@ -242,17 +463,20 @@ export default function IntervalExplorer({
                 </span>
 
                 <h3>
-                  Animais e grupos representativos
+                  Animais e grupos
+                  representativos
                 </h3>
               </div>
 
               <div className="life-grid">
-                {content.fauna.map((item) => (
-                  <LifeCard
-                    key={item.name}
-                    item={item}
-                  />
-                ))}
+                {content.fauna.map(
+                  (item) => (
+                    <LifeCard
+                      key={item.name}
+                      item={item}
+                    />
+                  )
+                )}
               </div>
             </div>
 
@@ -263,17 +487,20 @@ export default function IntervalExplorer({
                 </span>
 
                 <h3>
-                  Vegetação e evolução vegetal
+                  Vegetação e evolução
+                  vegetal
                 </h3>
               </div>
 
               <div className="life-grid">
-                {content.flora.map((item) => (
-                  <LifeCard
-                    key={item.name}
-                    item={item}
-                  />
-                ))}
+                {content.flora.map(
+                  (item) => (
+                    <LifeCard
+                      key={item.name}
+                      item={item}
+                    />
+                  )
+                )}
               </div>
             </div>
           </div>
@@ -291,7 +518,9 @@ export default function IntervalExplorer({
                     <span className="event-point" />
 
                     {index <
-                      content.events.length - 1 && (
+                      content.events
+                        .length -
+                        1 && (
                       <span className="event-line" />
                     )}
                   </div>
@@ -307,9 +536,13 @@ export default function IntervalExplorer({
                       {event.type}
                     </span>
 
-                    <h4>{event.title}</h4>
+                    <h4>
+                      {event.title}
+                    </h4>
 
-                    <p>{event.description}</p>
+                    <p>
+                      {event.description}
+                    </p>
                   </div>
                 </article>
               )
@@ -329,38 +562,50 @@ export default function IntervalExplorer({
               </h3>
 
               <p>
-                Estes exemplos não representam uma lista
-                completa da diversidade do período.
+                Estes exemplos não
+                representam uma lista
+                completa da diversidade do
+                período.
               </p>
             </div>
 
             <div className="fossil-grid">
-              {content.fossils.map((fossil) => (
-                <article
-                  key={fossil.name}
-                  className="fossil-card"
-                >
-                  <div className="fossil-placeholder">
-                    <span>FÓSSIL</span>
-                  </div>
+              {content.fossils.map(
+                (fossil) => (
+                  <article
+                    key={fossil.name}
+                    className="fossil-card"
+                  >
+                    <div className="fossil-placeholder">
+                      <span>
+                        FÓSSIL
+                      </span>
+                    </div>
 
-                  <div className="fossil-content">
-                    <span className="fossil-group">
-                      {fossil.group}
-                    </span>
+                    <div className="fossil-content">
+                      <span className="fossil-group">
+                        {fossil.group}
+                      </span>
 
-                    <h4>{fossil.name}</h4>
+                      <h4>
+                        {fossil.name}
+                      </h4>
 
-                    <strong>
-                      {fossil.interval}
-                    </strong>
+                      <strong>
+                        {
+                          fossil.interval
+                        }
+                      </strong>
 
-                    <p>
-                      {fossil.description}
-                    </p>
-                  </div>
-                </article>
-              ))}
+                      <p>
+                        {
+                          fossil.description
+                        }
+                      </p>
+                    </div>
+                  </article>
+                )
+              )}
             </div>
 
             <div className="database-preview">
@@ -374,9 +619,10 @@ export default function IntervalExplorer({
                 </h4>
 
                 <p>
-                  A próxima etapa permitirá consultar
-                  ocorrências fósseis reais por intervalo,
-                  organismo e localização.
+                  Em breve, ocorrências
+                  fósseis reais poderão ser
+                  consultadas por organismo,
+                  idade e localização.
                 </p>
               </div>
 
@@ -399,9 +645,9 @@ export default function IntervalExplorer({
               </h3>
 
               <p>
-                O GIULIA separa o conteúdo didático da
-                proveniência científica usada para
-                sustentá-lo.
+                Cada conjunto de dados deve
+                manter sua proveniência
+                científica identificável.
               </p>
             </div>
 
@@ -413,7 +659,9 @@ export default function IntervalExplorer({
                     className="reference-item"
                   >
                     <span className="reference-number">
-                      {String(index + 1).padStart(
+                      {String(
+                        index + 1
+                      ).padStart(
                         2,
                         "0"
                       )}
@@ -421,12 +669,31 @@ export default function IntervalExplorer({
 
                     <div>
                       <span className="reference-institution">
-                        {reference.institution}
+                        {
+                          reference.institution
+                        }
                       </span>
 
-                      <h4>{reference.title}</h4>
+                      <h4>
+                        {reference.title}
+                      </h4>
 
-                      <p>{reference.role}</p>
+                      <p>
+                        {reference.role}
+                      </p>
+
+                      {reference.url && (
+                        <a
+                          className="reference-link"
+                          href={
+                            reference.url
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Abrir fonte ↗
+                        </a>
+                      )}
                     </div>
                   </article>
                 )
@@ -434,6 +701,7 @@ export default function IntervalExplorer({
             </div>
           </div>
         )}
+
       </div>
     </section>
   );

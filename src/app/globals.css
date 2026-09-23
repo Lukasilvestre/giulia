@@ -1145,3 +1145,263 @@ a {
     align-items: flex-start;
   }
 }
+
+/* =========================================================
+   STRATIGRAPHIC SCALE
+   ========================================================= */
+
+.stratigraphy-container {
+  display: grid;
+  gap: 30px;
+}
+
+.stratigraphy-division {
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.stratigraphy-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 30px;
+
+  padding: 28px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.stratigraphy-heading h4 {
+  margin: 8px 0 3px;
+
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.stratigraphy-english {
+  color: var(--text-secondary);
+
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.stratigraphy-range {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  color: var(--accent);
+
+  white-space: nowrap;
+
+  font-size: 0.9rem;
+}
+
+.stratigraphy-range span {
+  color: var(--text-secondary);
+}
+
+.chrono-equivalent {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding: 14px 28px;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.025
+  );
+
+  border-bottom: 1px solid var(--border);
+
+  font-size: 0.72rem;
+}
+
+.chrono-equivalent span {
+  color: var(--text-secondary);
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.1em;
+}
+
+.chrono-equivalent strong {
+  font-weight: 400;
+
+  color: var(--text);
+}
+
+.stage-list {
+  padding: 10px 28px 20px;
+}
+
+.stage-row {
+  min-height: 76px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(140px, 0.8fr)
+    minmax(80px, 1fr)
+    minmax(150px, 0.7fr);
+
+  align-items: center;
+
+  gap: 25px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.stage-row:last-child {
+  border-bottom: 0;
+}
+
+.stage-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.stage-name strong {
+  font-size: 0.92rem;
+
+  font-weight: 500;
+}
+
+.stage-name span {
+  margin-top: 3px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.7rem;
+
+  font-style: italic;
+}
+
+.stage-bar-container {
+  display: flex;
+  align-items: center;
+
+  height: 12px;
+}
+
+.stage-bar {
+  height: 4px;
+
+  max-width: 100%;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      rgba(
+        214,
+        198,
+        132,
+        0.25
+      )
+    );
+}
+
+.stage-range {
+  color: var(--text-secondary);
+
+  text-align: right;
+
+  font-family: monospace;
+
+  font-size: 0.78rem;
+}
+
+.stratigraphy-note {
+  max-width: 850px;
+
+  margin-top: 40px;
+
+  padding: 22px;
+
+  border-left:
+    3px solid var(--accent);
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.025
+    );
+}
+
+.stratigraphy-note strong {
+  color: var(--accent);
+
+  font-weight: 500;
+}
+
+.stratigraphy-note p {
+  margin-bottom: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.7;
+
+  font-size: 0.9rem;
+}
+
+/* REFERENCE LINKS */
+
+.reference-link {
+  display: inline-block;
+
+  margin-top: 12px;
+
+  color: var(--accent);
+
+  font-size: 0.72rem;
+
+  letter-spacing: 0.05em;
+
+  transition: 0.2s;
+}
+
+.reference-link:hover {
+  transform: translateX(3px);
+}
+
+/* RESPONSIVE STRATIGRAPHY */
+
+@media (max-width: 700px) {
+  .stratigraphy-heading {
+    flex-direction: column;
+  }
+
+  .chrono-equivalent {
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+  .stage-row {
+    grid-template-columns:
+      1fr auto;
+
+    gap: 10px;
+
+    padding: 15px 0;
+  }
+
+  .stage-bar-container {
+    display: none;
+  }
+
+  .stage-range {
+    text-align: right;
+  }
+}
