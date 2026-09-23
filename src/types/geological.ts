@@ -1,4 +1,4 @@
-﻿export type GeologicalRank =
+export type GeologicalRank =
   | "eon"
   | "era"
   | "period"

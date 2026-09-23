@@ -2,49 +2,70 @@ import type {
   IntervalScientificContent,
 } from "@/types/interval-content";
 
-import cretaceousContent from "./cretaceous";
+import {
+  geologicalTimescale,
+} from "@/data/geological-timescale";
 
 import {
-  cretaceousStratigraphy,
-} from "./cretaceous-stratigraphy";
+  findTimelinePath,
+} from "@/lib/timeline-navigation";
 
 import {
-  scientificReferenceUrls,
-} from "@/data/reference-links";
+  cretaceousContent,
+} from "./cretaceous";
 
-function addReferenceUrls(
-  content: IntervalScientificContent
-): IntervalScientificContent {
-  return {
-    ...content,
+import {
+  buildGenericIntervalContent,
+} from "./generic";
 
-    references: content.references.map(
-      (reference) => ({
-        ...reference,
-
-        url:
-          scientificReferenceUrls[
-            reference.id
-          ],
-      })
-    ),
-  };
-}
-
-const intervalContents: Record<
-  string,
-  IntervalScientificContent
-> = {
-  cretaceous: addReferenceUrls({
-    ...cretaceousContent,
-
-    stratigraphy:
-      cretaceousStratigraphy,
-  }),
+export {
+  cretaceousContent,
 };
+
+export const intervalContents:
+  Record<
+    string,
+    IntervalScientificContent
+  > = {
+    cretaceous:
+      cretaceousContent,
+  };
 
 export function getIntervalContent(
   slug: string
-): IntervalScientificContent | undefined {
-  return intervalContents[slug];
+):
+  | IntervalScientificContent
+  | undefined {
+  const curated =
+    intervalContents[
+      slug
+    ];
+
+  if (curated) {
+    return curated;
+  }
+
+  const path =
+    findTimelinePath(
+      geologicalTimescale,
+      slug
+    );
+
+  if (
+    !path ||
+    path.length === 0
+  ) {
+    return undefined;
+  }
+
+  const interval =
+    path[
+      path.length -
+        1
+    ];
+
+  return buildGenericIntervalContent(
+    interval,
+    path
+  );
 }

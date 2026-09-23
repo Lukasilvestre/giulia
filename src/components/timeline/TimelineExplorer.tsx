@@ -25,45 +25,49 @@ interface TimelineExplorerProps {
   initialFocus?: string;
 }
 
+const levels = [
+  {
+    title: "Éons",
+    number: "01",
+  },
+  {
+    title: "Eras",
+    number: "02",
+  },
+  {
+    title: "Períodos",
+    number: "03",
+  },
+  {
+    title: "Épocas / séries",
+    number: "04",
+  },
+];
+
 function rankLabel(
   rank: string
 ) {
-  const normalized =
-    rank.toLowerCase();
-
-  if (
-    normalized.includes(
-      "eon"
-    )
+  switch (
+    rank
   ) {
-    return "Éon";
-  }
+    case "eon":
+      return "Éon";
 
-  if (
-    normalized.includes(
-      "era"
-    )
-  ) {
-    return "Era";
-  }
+    case "era":
+      return "Era";
 
-  if (
-    normalized.includes(
-      "period"
-    )
-  ) {
-    return "Período";
-  }
+    case "period":
+      return "Período";
 
-  if (
-    normalized.includes(
-      "epoch"
-    )
-  ) {
-    return "Época";
-  }
+    case "epoch":
+      return "Época / série";
 
-  return rank;
+    case "age":
+      return "Idade";
+
+    default:
+      return rank;
+  }
 }
 
 export default function TimelineExplorer({
@@ -85,133 +89,92 @@ export default function TimelineExplorer({
       ]
     );
 
-  const defaultEon =
+  const defaultInterval =
     intervals.find(
       (
         interval
       ) =>
-        interval.children &&
-        interval.children.length >
-          0
+        interval.slug ===
+        "phanerozoic"
     ) ??
     intervals[0];
 
   const [
-    eonSlug,
-    setEonSlug,
+    selectedPath,
+    setSelectedPath,
   ] =
-    useState(
-      initialPath?.[0]
-        ?.slug ??
-        defaultEon?.slug ??
-        ""
-    );
-
-  const [
-    eraSlug,
-    setEraSlug,
-  ] =
-    useState(
-      initialPath?.[1]
-        ?.slug ??
-        ""
-    );
-
-  const [
-    periodSlug,
-    setPeriodSlug,
-  ] =
-    useState(
-      initialPath?.[2]
-        ?.slug ??
-        ""
-    );
-
-  const selectedEon =
-    intervals.find(
-      (
-        interval
-      ) =>
-        interval.slug ===
-        eonSlug
-    );
-
-  const eras =
-    selectedEon?.children ??
-    [];
-
-  const selectedEra =
-    eras.find(
-      (
-        interval
-      ) =>
-        interval.slug ===
-        eraSlug
-    );
-
-  const periods =
-    selectedEra?.children ??
-    [];
-
-  const selectedPeriod =
-    periods.find(
-      (
-        interval
-      ) =>
-        interval.slug ===
-        periodSlug
-    );
-
-  const selected =
-    selectedPeriod ??
-    selectedEra ??
-    selectedEon;
-
-  const selectedPath =
-    [
-      selectedEon,
-      selectedEra,
-      selectedPeriod,
-    ].filter(
-      (
-        interval
-      ): interval is GeologicalInterval =>
-        Boolean(
-          interval
+    useState<
+      GeologicalInterval[]
+    >(
+      initialPath ??
+        (
+          defaultInterval
+            ? [
+                defaultInterval,
+              ]
+            : []
         )
     );
 
-  function selectEon(
+  function optionsAtLevel(
+    level:
+      number
+  ):
+    GeologicalInterval[] {
+    if (
+      level === 0
+    ) {
+      return intervals;
+    }
+
+    return (
+      selectedPath[
+        level - 1
+      ]?.children ??
+      []
+    );
+  }
+
+  function selectInterval(
+    level:
+      number,
     interval:
       GeologicalInterval
   ) {
-    setEonSlug(
-      interval.slug
-    );
+    setSelectedPath(
+      (
+        current
+      ) => [
+        ...current.slice(
+          0,
+          level
+        ),
 
-    setEraSlug("");
-    setPeriodSlug("");
+        interval,
+      ]
+    );
   }
 
-  function selectEra(
-    interval:
-      GeologicalInterval
+  function returnToLevel(
+    index: number
   ) {
-    setEraSlug(
-      interval.slug
-    );
-
-    setPeriodSlug("");
-  }
-
-  function selectPeriod(
-    interval:
-      GeologicalInterval
-  ) {
-    setPeriodSlug(
-      interval.slug
+    setSelectedPath(
+      (
+        current
+      ) =>
+        current.slice(
+          0,
+          index +
+            1
+        )
     );
   }
+
+  const selected =
+    selectedPath[
+      selectedPath.length -
+        1
+    ];
 
   if (!selected) {
     return null;
@@ -228,6 +191,9 @@ export default function TimelineExplorer({
       selected.startMa,
       selected.endMa
     );
+
+  const canUsePaleoEarth =
+    midpoint <= 410;
 
   return (
     <div className="timeline-v1">
@@ -252,31 +218,11 @@ export default function TimelineExplorer({
 
               <button
                 type="button"
-                onClick={() => {
-                  if (
-                    index === 0
-                  ) {
-                    selectEon(
-                      interval
-                    );
-                  }
-
-                  if (
-                    index === 1
-                  ) {
-                    selectEra(
-                      interval
-                    );
-                  }
-
-                  if (
-                    index === 2
-                  ) {
-                    selectPeriod(
-                      interval
-                    );
-                  }
-                }}
+                onClick={() =>
+                  returnToLevel(
+                    index
+                  )
+                }
               >
                 {
                   interval.namePt
@@ -288,224 +234,115 @@ export default function TimelineExplorer({
       </nav>
 
       <div className="timeline-levels">
-        <section className="timeline-level">
-          <header>
-            <span>
-              01
-            </span>
+        {levels.map(
+          (
+            level,
+            levelIndex
+          ) => {
+            const options =
+              optionsAtLevel(
+                levelIndex
+              );
 
-            <div>
-              <small>
-                NÍVEL
-              </small>
+            const active =
+              selectedPath[
+                levelIndex
+              ];
 
-              <h2>
-                Éons
-              </h2>
-            </div>
-          </header>
+            return (
+              <section
+                key={
+                  level.title
+                }
+                className={[
+                  "timeline-level",
 
-          <div className="timeline-level-list">
-            {intervals.map(
-              (
-                interval
-              ) => (
-                <button
-                  key={
-                    interval.slug
-                  }
-                  type="button"
-                  className={
-                    interval.slug ===
-                    selectedEon
-                      ?.slug
-                      ? "active"
-                      : ""
-                  }
-                  onClick={() =>
-                    selectEon(
-                      interval
-                    )
-                  }
-                >
+                  options.length ===
+                  0
+                    ? "inactive"
+                    : "",
+                ]
+                  .filter(
+                    Boolean
+                  )
+                  .join(
+                    " "
+                  )}
+              >
+                <header>
                   <span>
                     {
-                      interval.namePt
+                      level.number
                     }
                   </span>
 
-                  <small>
-                    {formatIntervalAge(
-                      interval.startMa,
-                      interval.endMa
+                  <div>
+                    <small>
+                      NÍVEL
+                    </small>
+
+                    <h2>
+                      {
+                        level.title
+                      }
+                    </h2>
+                  </div>
+                </header>
+
+                {options.length >
+                0 ? (
+                  <div className="timeline-level-list">
+                    {options.map(
+                      (
+                        interval
+                      ) => (
+                        <button
+                          key={
+                            interval.slug
+                          }
+                          type="button"
+                          className={
+                            active
+                              ?.slug ===
+                            interval.slug
+                              ? "active"
+                              : ""
+                          }
+                          onClick={() =>
+                            selectInterval(
+                              levelIndex,
+                              interval
+                            )
+                          }
+                        >
+                          <span>
+                            {
+                              interval.namePt
+                            }
+                          </span>
+
+                          <small>
+                            {formatIntervalAge(
+                              interval.startMa,
+                              interval.endMa
+                            )}
+                          </small>
+                        </button>
+                      )
                     )}
-                  </small>
-                </button>
-              )
-            )}
-          </div>
-        </section>
-
-        <section
-          className={[
-            "timeline-level",
-
-            eras.length ===
-            0
-              ? "inactive"
-              : "",
-          ]
-            .filter(
-              Boolean
-            )
-            .join(" ")}
-        >
-          <header>
-            <span>
-              02
-            </span>
-
-            <div>
-              <small>
-                NÍVEL
-              </small>
-
-              <h2>
-                Eras
-              </h2>
-            </div>
-          </header>
-
-          {eras.length >
-          0 ? (
-            <div className="timeline-level-list">
-              {eras.map(
-                (
-                  interval
-                ) => (
-                  <button
-                    key={
-                      interval.slug
-                    }
-                    type="button"
-                    className={
-                      interval.slug ===
-                      selectedEra
-                        ?.slug
-                        ? "active"
-                        : ""
-                    }
-                    onClick={() =>
-                      selectEra(
-                        interval
-                      )
-                    }
-                  >
-                    <span>
-                      {
-                        interval.namePt
-                      }
-                    </span>
-
-                    <small>
-                      {formatIntervalAge(
-                        interval.startMa,
-                        interval.endMa
-                      )}
-                    </small>
-                  </button>
-                )
-              )}
-            </div>
-          ) : (
-            <p className="timeline-level-empty">
-              Nenhuma subdivisão
-              desse nível está
-              cadastrada atualmente
-              no GIULIA.
-            </p>
-          )}
-        </section>
-
-        <section
-          className={[
-            "timeline-level",
-
-            periods.length ===
-            0
-              ? "inactive"
-              : "",
-          ]
-            .filter(
-              Boolean
-            )
-            .join(" ")}
-        >
-          <header>
-            <span>
-              03
-            </span>
-
-            <div>
-              <small>
-                NÍVEL
-              </small>
-
-              <h2>
-                Períodos
-              </h2>
-            </div>
-          </header>
-
-          {periods.length >
-          0 ? (
-            <div className="timeline-level-list">
-              {periods.map(
-                (
-                  interval
-                ) => (
-                  <button
-                    key={
-                      interval.slug
-                    }
-                    type="button"
-                    className={
-                      interval.slug ===
-                      selectedPeriod
-                        ?.slug
-                        ? "active"
-                        : ""
-                    }
-                    onClick={() =>
-                      selectPeriod(
-                        interval
-                      )
-                    }
-                  >
-                    <span>
-                      {
-                        interval.namePt
-                      }
-                    </span>
-
-                    <small>
-                      {formatIntervalAge(
-                        interval.startMa,
-                        interval.endMa
-                      )}
-                    </small>
-                  </button>
-                )
-              )}
-            </div>
-          ) : (
-            <p className="timeline-level-empty">
-              Selecione uma era
-              para explorar seus
-              períodos.
-            </p>
-          )}
-        </section>
+                  </div>
+                ) : (
+                  <p className="timeline-level-empty">
+                    Nenhuma
+                    subdivisão
+                    cadastrada neste
+                    nível.
+                  </p>
+                )}
+              </section>
+            );
+          }
+        )}
       </div>
 
       <section className="timeline-selected">
@@ -551,8 +388,7 @@ export default function TimelineExplorer({
                 selected.name
               )}`}
             >
-              Buscar no GIULIA
-              →
+              Buscar no GIULIA →
             </Link>
           </div>
         </div>
@@ -594,7 +430,7 @@ export default function TimelineExplorer({
                 "pt-BR",
                 {
                   maximumFractionDigits:
-                    2,
+                    3,
                 }
               )}{" "}
               Ma
@@ -639,12 +475,12 @@ export default function TimelineExplorer({
             </span>
 
             <strong>
-              Dossiê
+              Atlas
             </strong>
 
             <small>
-              Dados e contexto
-              científico
+              Contexto e
+              subdivisões
             </small>
           </Link>
 
@@ -662,27 +498,44 @@ export default function TimelineExplorer({
             </strong>
 
             <small>
-              Pré-preencher este
-              intervalo
+              Consultar PBDB
             </small>
           </Link>
 
-          <Link
-            href={`/paleoearth?time=${midpoint}`}
-          >
-            <span>
-              03
-            </span>
+          {canUsePaleoEarth ? (
+            <Link
+              href={`/paleoearth?time=${midpoint}`}
+            >
+              <span>
+                03
+              </span>
 
-            <strong>
-              PaleoEarth
-            </strong>
+              <strong>
+                PaleoEarth
+              </strong>
 
-            <small>
-              Usar {midpoint} Ma
-              como idade inicial
-            </small>
-          </Link>
+              <small>
+                Reconstruir em{" "}
+                {midpoint} Ma
+              </small>
+            </Link>
+          ) : (
+            <div className="timeline-disabled-card">
+              <span>
+                03
+              </span>
+
+              <strong>
+                PaleoEarth
+              </strong>
+
+              <small>
+                Fora do limite
+                atual do modelo
+                tectônico utilizado.
+              </small>
+            </div>
+          )}
 
           <Link
             href={`/search?q=${encodeURIComponent(
@@ -698,7 +551,7 @@ export default function TimelineExplorer({
             </strong>
 
             <small>
-              Conteúdo associado
+              Conteúdo relacionado
             </small>
           </Link>
         </div>
